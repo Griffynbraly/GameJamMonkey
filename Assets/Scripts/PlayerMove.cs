@@ -1,0 +1,256 @@
+using UnityEngine;
+
+public class PlayerMove : MonoBehaviour
+{
+    private float horizontal;
+    private float vertical;
+    private float speed = 9f;
+    private float climbSpeed = 9f;
+    private float jumpForce = 18f;
+    private bool isFacingRight;
+    private float lastHorizontal;
+    private bool touchingLadder;
+    private bool climbingLadder;
+    private bool canWalkOff;
+    private Vector3 currentLadderLocation;
+
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform groundCheck;
+
+
+
+    private enum PlayerState {Idle, Running, Airborne, Climbing}
+
+    PlayerState state;
+
+    private bool stateComplete;
+    void Update()
+    {
+        //Debug.Log(touchingLadder);
+        horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
+
+        if (horizontal != lastHorizontal)
+        {
+            Flip();
+        }
+        HandleJump();
+
+        if (stateComplete)
+        {
+            SelectState();
+        }
+
+        HandleClimb();
+        lastHorizontal = horizontal;
+
+        UpdateState();
+
+        if (!climbingLadder)
+        {
+            rb.gravityScale = 4;
+        }
+    }
+
+    void UpdateState()
+    {
+        switch (state)
+        {
+            case PlayerState.Idle:
+                UpdateIdle();
+                break;
+            case PlayerState.Running:
+                UpdateRun();
+                break;
+            case PlayerState.Airborne:
+                UpdateAir();
+                break;
+            case PlayerState.Climbing:
+                UpdateClimb();
+                break;
+        }
+    }
+
+    void SelectState()
+    {
+        stateComplete = false;
+        if (climbingLadder)
+        {
+            state = PlayerState.Climbing;
+            StartClimb();
+        }
+        else
+        {
+            if (IsGrounded())
+            {
+                if (rb.linearVelocity.x == 0)
+                {
+                    state = PlayerState.Idle;
+                    StartIdle();
+                }
+                else
+                {
+                    state = PlayerState.Running;
+                    StartRun();
+                }
+            }
+            else
+            {
+                state = PlayerState.Airborne;
+                StartAir();
+            }
+        }
+        
+    }
+    void UpdateIdle()
+    {
+        if (rb.linearVelocity.x != 0)
+        {
+            stateComplete = true;
+        }
+    }
+    void UpdateRun()
+    {
+        if (rb.linearVelocity.x == 0)
+        {
+            stateComplete = true;
+        }
+    }
+    void UpdateAir()
+    {
+        if (IsGrounded())
+        {
+            stateComplete = true;
+        }
+    }
+    void UpdateClimb()
+    {
+        if (climbingLadder && !touchingLadder)
+        {
+            rb.gravityScale = 4f;
+            Jump();
+            stateComplete = true;
+        }
+    }
+
+    void StartIdle()
+    {
+        //animation;
+    }
+    void StartRun()
+    {
+        //animation;
+    }
+    void StartAir()
+    {
+        //animation;
+    }
+    void StartClimb()
+    {
+        //animation;
+    }
+    private bool IsGrounded()
+    {
+        return Physics2D.OverlapCircle(groundCheck.position, .4f, groundLayer);
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (climbingLadder)
+        {
+            if (vertical != 0)
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, vertical * climbSpeed);
+            }
+            else
+            {
+                rb.linearVelocity = Vector3.zero;
+            }
+            
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
+        }
+            
+       
+    }
+
+    private void Flip()
+    {
+        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 localScale = transform.localScale;
+            localScale.x *= -1f;
+            transform.localScale = localScale;
+        }
+    }
+    private void HandleJump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded() || Input.GetKeyDown(KeyCode.Space) && climbingLadder && horizontal != 0)
+        {
+            Jump();
+            climbingLadder = false;
+
+
+        }
+    }
+    private void HandleClimb()
+    {
+        if (!climbingLadder)
+        {
+            if (vertical > 0 && touchingLadder)
+            {
+                canWalkOff = false;
+                climbingLadder = true;
+                transform.position = new Vector2(currentLadderLocation.x, transform.position.y);
+                rb.linearVelocity = new Vector2(0f, 0f);
+
+            }
+        }
+        if (climbingLadder)
+        {
+            
+            if (!IsGrounded() && climbingLadder)
+            {
+                canWalkOff = true;
+            }
+            rb.gravityScale = 0;
+            if (!touchingLadder || canWalkOff && IsGrounded())
+            {
+                climbingLadder = false;
+            }
+        }
+
+    }
+
+
+    private void Jump()
+    {
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+    }
+    private void SlowFall()
+    {
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.6f);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Ladder"))
+        {
+            touchingLadder = true;
+            currentLadderLocation = other.transform.position;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (touchingLadder)
+        {
+            touchingLadder = false;
+        }
+        
+    }
+}
