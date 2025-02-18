@@ -27,7 +27,7 @@ public class PlayerMove : MonoBehaviour
     private bool stateComplete;
     void Update()
     {
-        //Debug.Log(touchingLadder);
+        //Debug.Log(state);
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
 
@@ -57,6 +57,9 @@ public class PlayerMove : MonoBehaviour
     {
         switch (state)
         {
+            case PlayerState.Climbing:
+                UpdateClimb();
+                break;
             case PlayerState.Idle:
                 UpdateIdle();
                 break;
@@ -66,9 +69,7 @@ public class PlayerMove : MonoBehaviour
             case PlayerState.Airborne:
                 UpdateAir();
                 break;
-            case PlayerState.Climbing:
-                UpdateClimb();
-                break;
+            
         }
     }
 
@@ -103,36 +104,36 @@ public class PlayerMove : MonoBehaviour
         }
         
     }
+    void UpdateClimb()
+    {
+        if (climbingLadder && !touchingLadder || !climbingLadder)
+        {
+            rb.gravityScale = 4f;
+            stateComplete = true;
+        }
+    }
     void UpdateIdle()
     {
-        if (rb.linearVelocity.x != 0)
+        if (rb.linearVelocity.x != 0 || !IsGrounded() || climbingLadder)
         {
             stateComplete = true;
         }
     }
     void UpdateRun()
     {
-        if (rb.linearVelocity.x == 0)
+        if (rb.linearVelocity.x == 0 || !IsGrounded() || climbingLadder)
         {
             stateComplete = true;
         }
     }
     void UpdateAir()
     {
-        if (IsGrounded())
+        if (IsGrounded() || climbingLadder)
         {
             stateComplete = true;
         }
     }
-    void UpdateClimb()
-    {
-        if (climbingLadder && !touchingLadder)
-        {
-            rb.gravityScale = 4f;
-            Jump();
-            stateComplete = true;
-        }
-    }
+    
 
     void StartIdle()
     {
@@ -239,7 +240,7 @@ public class PlayerMove : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Ladder"))
+        if (other.CompareTag("Climbable"))
         {
             touchingLadder = true;
             currentLadderLocation = other.transform.position;
