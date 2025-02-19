@@ -4,8 +4,8 @@ public class PlayerMove : MonoBehaviour
 {
     private float horizontal;
     private float vertical;
-    private float speed = 9f;
-    private float climbSpeed = 9f;
+    private float speed = 11f;
+    private float climbSpeed = 10f;
     private float jumpForce = 18f;
     private bool isFacingRight;
     private float lastHorizontal;
@@ -197,6 +197,10 @@ public class PlayerMove : MonoBehaviour
             climbingLadder = false;
 
 
+        }
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            SlowFall();
         }
     }
     private void HandleClimb()

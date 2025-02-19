@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ladder
   - Climbable
+  - Banana
   layers:
   - Default
   - TransparentFX
