@@ -7,7 +7,7 @@ public class AstronautAI : MonoBehaviour
     private AstronautState state;
 
     private bool stateComplete;
-    private bool stunned;
+    public bool stunned;
     private bool chasing;
     private bool isFacingRight;
     private bool playerInView;
@@ -28,6 +28,15 @@ public class AstronautAI : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         state = AstronautState.Patrolling;
+
+        if (transform.localScale.x == -1)
+        {
+            isFacingRight = true;
+        }
+        else
+        {
+            isFacingRight = false;
+        }
     }
 
     void Update()
@@ -45,6 +54,10 @@ public class AstronautAI : MonoBehaviour
             FlipCheck();
         if (playerInView)
             timeToHide = Time.time + 3f;
+        if (stunned)
+        {
+            stateComplete = true;
+        }
     }
 
     void FixedUpdate()
@@ -185,7 +198,7 @@ public class AstronautAI : MonoBehaviour
     {
         WallCheck();
         moveSpeed = 4f;
-        if (playerInView || stunned)
+        if (playerInView)
             stateComplete = true;
     }
 
@@ -216,8 +229,8 @@ public class AstronautAI : MonoBehaviour
 
     private bool TouchingPlayer()
     {
-        Collider2D collider = Physics2D.OverlapCircle(rayOrigin.transform.position, 9f);
-        return collider != null && collider.gameObject.name == "Player";
+        Collider2D collider = Physics2D.OverlapCircle(rayOrigin.transform.position, 11f);
+        return collider != null && collider.gameObject.CompareTag("Player");
     }
 
     private void SpawnRaycast()
@@ -278,10 +291,15 @@ public class AstronautAI : MonoBehaviour
                 if (playerMove != null)
                 {
                     if (state == AstronautState.Chasing || state == AstronautState.Attacking)
-                        playerMove.Killed();
+                    {
+                        //playerMove.Killed();
+                    }
                 }
             }
+            if (collider.gameObject.CompareTag("Guard"))
+            {
+                Flip();
+            }
         }
-    
     }
 }

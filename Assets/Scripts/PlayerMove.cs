@@ -16,14 +16,17 @@ public class PlayerMove : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private Transform groundCheck;
+    private Transform groundCheck;
 
 
 
     private enum PlayerState {Idle, Running, Airborne, Climbing}
 
     PlayerState state;
-
+    private void Start()
+    {
+        groundCheck = GameObject.FindGameObjectWithTag("GroundCheck").transform;
+    }
     private bool stateComplete;
     void Update()
     {
@@ -213,8 +216,6 @@ public class PlayerMove : MonoBehaviour
         {
             Jump(jumpForce);
             climbingLadder = false;
-
-
         }
         if (Input.GetKeyUp(KeyCode.Space))
         {
