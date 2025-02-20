@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9efa8a2cce9ce44a392a9745519f6893
+guid: 05bf4836e71866348b7e8d9ffc9f86a3
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Banana placed
+  - name: Title pallete
     originalName: 
-    pivot: {x: 0.5, y: 0.52}
+    pivot: {x: 0.525, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,9 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 30
-      height: 25
-    spriteID: d43a18acfa7d94a7e9feb98e82543810
+      width: 320
+      height: 160
+    spriteID: 736b5c9ef07e39e49b1d241e7518d0b8
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -147,21 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 304406332
-    name: Banana placed
+    guid: -1643800551
+    name: Title pallete
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Banana placed
+    - name: Title pallete
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 1
-        y: 3
-        width: 30
-        height: 25
-      spriteId: d43a18acfa7d94a7e9feb98e82543810
+        x: 16
+        y: 16
+        width: 320
+        height: 160
+      spriteId: 736b5c9ef07e39e49b1d241e7518d0b8
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -204,5 +204,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 64, y: 64}
+  canvasSize: {x: 368, y: 192}
+  previousTextureSize: {x: 512, y: 256}

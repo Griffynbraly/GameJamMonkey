@@ -17,7 +17,7 @@ public class AstronautAI : MonoBehaviour
     private float velocityXSmooth = 0f;
     private float timeToHide = 999999 * 999999f;
 
-    [SerializeField] private GameObject player;
+    private GameObject player;
     [SerializeField] private GameObject rayOrigin;
     [SerializeField] private GameObject bulletOrigin;
     [SerializeField] private GameObject tazeBullet;
@@ -26,6 +26,7 @@ public class AstronautAI : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
         state = AstronautState.Patrolling;
     }
 
@@ -85,7 +86,7 @@ public class AstronautAI : MonoBehaviour
             return;
         }
 
-        if (TouchingPlayer() && playerInView && !chasing)
+        if (TouchingPlayer() && playerInView)
         {
             state = AstronautState.Attacking;
             StartAttack();
@@ -142,7 +143,15 @@ public class AstronautAI : MonoBehaviour
     IEnumerator StandStill()
     {
         yield return new WaitForSeconds(1f);
-        if (playerInView) chasing = true;
+        if (TouchingPlayer())
+        {
+            chasing = false;
+            stateComplete = true;
+        }
+        else if (playerInView) 
+        {
+            chasing = true;
+        }
         stunned = false;
         stateComplete = true;
     }
@@ -158,7 +167,7 @@ public class AstronautAI : MonoBehaviour
         isShooting = true;
         rb.linearVelocity = Vector2.zero;
         yield return new WaitForSeconds(0.5f);
-        Instantiate(tazeBullet, bulletOrigin.transform.position, Quaternion.LookRotation(Vector3.forward, player.transform.position - rayOrigin.transform.position));
+        Instantiate(tazeBullet, bulletOrigin.transform.position, Quaternion.LookRotation(Vector3.forward, player.transform.position - bulletOrigin.transform.position));
 
         if (!TouchingPlayer()) chasing = true;
         isShooting = false;
@@ -218,7 +227,6 @@ public class AstronautAI : MonoBehaviour
         float distance = Vector2.Distance(rayOrigin.transform.position, player.transform.position);
         float angle = Vector2.SignedAngle(transform.right, direction);
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin.transform.position, direction, distance);
-
         Debug.DrawRay(rayOrigin.transform.position, direction * distance, Color.red);
 
 
@@ -229,7 +237,7 @@ public class AstronautAI : MonoBehaviour
                 
                 if (!chasing)
                 {
-                    playerInView = isFacingRight ? angle < 100 : angle < 80;
+                    playerInView = isFacingRight ? angle < 140 : angle < 30;
                 }
                 else
                 {
@@ -258,5 +266,22 @@ public class AstronautAI : MonoBehaviour
             StartCoroutine(StandStill());
             stunned = true;
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collider)
+    {
+        if (collider != null)
+        {
+            if (collider.gameObject.CompareTag("Player"))
+            {
+                PlayerMove playerMove = GetComponent<Collider2D>().GetComponent<PlayerMove>();
+                if (playerMove != null)
+                {
+                    if (state == AstronautState.Chasing || state == AstronautState.Attacking)
+                        playerMove.Killed();
+                }
+            }
+        }
+    
     }
 }

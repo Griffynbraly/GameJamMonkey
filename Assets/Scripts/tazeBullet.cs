@@ -21,33 +21,27 @@ public class tazeBullet : MonoBehaviour
         yield return new WaitForSeconds(1);
         Destroy(gameObject);
     }
-    private void OnTriggerEnter2D(Collider2D collider)
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collider != null)
+        // Check if the object has only a BoxCollider2D and no other collider types
+        BoxCollider2D boxCollider = collision.GetComponent<BoxCollider2D>();
+        Collider2D[] colliders = collision.GetComponents<Collider2D>();
+
+        if (boxCollider.gameObject.CompareTag("Player"))
         {
-            if (collider.gameObject.name == "Player")
+            
+            PlayerMove playerMove = boxCollider.GetComponent<PlayerMove>();
+            if (playerMove != null)
             {
-                Debug.Log("trigger collided");
-                PlayerMove playerMove = collider.GetComponent<PlayerMove>();
-                if (playerMove != null)
-                {
-                    playerMove.HitByBullet();
-                }
-            }
-            if (collider.gameObject.name != "AstronautGuard")
-            {
+                playerMove.Killed();
                 Destroy(gameObject);
             }
         }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision != null)
+        else if (boxCollider != null && colliders.Length == 1)
         {
-            if (collision.gameObject.layer == 6)
+            if (boxCollider.gameObject.layer == 6)
             {
-                Debug.Log("collider collided");
                 Destroy(gameObject);
             }
         }

@@ -167,7 +167,11 @@ public class PlayerMove : MonoBehaviour
     private bool IsOnGuard()
     {
         Collider2D collider = Physics2D.OverlapCircle(groundCheck.transform.position, .4f);
-        return collider != null && collider.gameObject.name == "AstronautGuard";
+        if (collider != null)
+        {
+            return collider.CompareTag("Guard");
+        }
+        else return false;
 
     }
 
@@ -273,7 +277,7 @@ public class PlayerMove : MonoBehaviour
         
     }
 
-    public void HitByBullet()
+    public void Killed()
     {
         Debug.Log("AHHH OH MY GOD YOU FUKCING TAZED ME");
     }

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9efa8a2cce9ce44a392a9745519f6893
+guid: 5ab15845de7785c42aa1f2c3f065e0e7
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Banana placed
+  - name: SNeaking on
     originalName: 
-    pivot: {x: 0.5, y: 0.52}
+    pivot: {x: 0.5, y: 0.5483871}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,9 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 30
-      height: 25
-    spriteID: d43a18acfa7d94a7e9feb98e82543810
+      width: 128
+      height: 93
+    spriteID: b45761172a1087645a6248ec309b11eb
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -147,21 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 304406332
-    name: Banana placed
+    guid: 1057458607
+    name: SNeaking on
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Banana placed
+    - name: SNeaking on
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 1
-        y: 3
-        width: 30
-        height: 25
-      spriteId: d43a18acfa7d94a7e9feb98e82543810
+        x: 0
+        y: 13
+        width: 128
+        height: 93
+      spriteId: b45761172a1087645a6248ec309b11eb
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -204,5 +204,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 64, y: 64}
+  canvasSize: {x: 128, y: 128}
+  previousTextureSize: {x: 256, y: 128}

@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Ladder
   - Climbable
   - Banana
+  - Guard
   layers:
   - Default
   - TransparentFX
