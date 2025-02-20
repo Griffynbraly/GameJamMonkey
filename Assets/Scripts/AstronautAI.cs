@@ -11,6 +11,7 @@ public class AstronautAI : MonoBehaviour
     private bool chasing;
     private bool isFacingRight;
     private bool playerInView;
+    private bool isShooting;
 
     private float moveSpeed;
     private float velocityXSmooth = 0f;
@@ -18,6 +19,8 @@ public class AstronautAI : MonoBehaviour
 
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject rayOrigin;
+    [SerializeField] private GameObject bulletOrigin;
+    [SerializeField] private GameObject tazeBullet;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
 
@@ -49,7 +52,7 @@ public class AstronautAI : MonoBehaviour
         {
             int direction = isFacingRight ? 1 : -1;
             float targetVelocityX = direction * moveSpeed;
-            float smoothTime = state == AstronautState.Chasing ? 0.2f : 0f;
+            float smoothTime = state == AstronautState.Chasing ? 0.1f : 0f;
 
             float newVelocityX = Mathf.SmoothDamp(rb.linearVelocity.x, targetVelocityX, ref velocityXSmooth, smoothTime);
             rb.linearVelocity = new Vector2(newVelocityX, rb.linearVelocity.y);
@@ -78,28 +81,52 @@ public class AstronautAI : MonoBehaviour
         if (stunned)
         {
             state = AstronautState.Stunned;
+            StartStun();
             return;
         }
 
-        if (TouchingPlayer())
+        if (TouchingPlayer() && playerInView && !chasing)
         {
             state = AstronautState.Attacking;
+            StartAttack();
         }
         else if (chasing)
         {
             state = AstronautState.Chasing;
+            StartChase();
         }
-        else if (playerInView)
+        else if (playerInView && state == AstronautState.Patrolling)
         {
-            if (state == AstronautState.Patrolling)
-                state = AstronautState.Scared;
+            state = AstronautState.Scared;
+            StartScared();
         }
         else
         {
             state = AstronautState.Patrolling;
+            StartPatrol();
         }
     }
 
+    void StartStun()
+    {
+        //animation;
+    }
+    void StartScared()
+    {
+        //animation;
+    }
+    void StartAttack()
+    {
+        //animation;
+    }
+    void StartChase()
+    {
+        //animation;
+    }
+    void StartPatrol()
+    {
+        //animation;
+    }
     void UpdateStun()
     {
         rb.linearVelocity = Vector2.zero;
@@ -122,26 +149,25 @@ public class AstronautAI : MonoBehaviour
 
     void UpdateAttack()
     {
+        if (!isShooting)
         StartCoroutine(ChargeAttack());
     }
 
     IEnumerator ChargeAttack()
     {
+        isShooting = true;
         rb.linearVelocity = Vector2.zero;
         yield return new WaitForSeconds(0.5f);
+        Instantiate(tazeBullet, bulletOrigin.transform.position, Quaternion.LookRotation(Vector3.forward, player.transform.position - rayOrigin.transform.position));
 
-        if (TouchingPlayer())
-        {
-            // Player hit logic here
-        }
-
-        chasing = true;
+        if (!TouchingPlayer()) chasing = true;
+        isShooting = false;
         stateComplete = true;
     }
 
     void UpdateChase()
     {
-        moveSpeed = 8f;
+        moveSpeed = 6f;
         if (!chasing || TouchingPlayer() || Time.time > timeToHide)
             chasing = false;
             stateComplete = true;
@@ -181,12 +207,13 @@ public class AstronautAI : MonoBehaviour
 
     private bool TouchingPlayer()
     {
-        Collider2D collider = Physics2D.OverlapCircle(rayOrigin.transform.position, 1f);
+        Collider2D collider = Physics2D.OverlapCircle(rayOrigin.transform.position, 9f);
         return collider != null && collider.gameObject.name == "Player";
     }
 
     private void SpawnRaycast()
     {
+        
         Vector2 direction = (player.transform.position - rayOrigin.transform.position).normalized;
         float distance = Vector2.Distance(rayOrigin.transform.position, player.transform.position);
         float angle = Vector2.SignedAngle(transform.right, direction);
@@ -194,13 +221,15 @@ public class AstronautAI : MonoBehaviour
 
         Debug.DrawRay(rayOrigin.transform.position, direction * distance, Color.red);
 
+
         if (hit.collider != null)
         {
             if (hit.collider.gameObject.name == "Player")
             {
+                
                 if (!chasing)
                 {
-                    playerInView = isFacingRight ? angle > 120 : angle < 60;
+                    playerInView = isFacingRight ? angle < 100 : angle < 80;
                 }
                 else
                 {

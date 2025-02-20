@@ -35,6 +35,7 @@ public class PlayerMove : MonoBehaviour
         {
             Flip();
         }
+
         HandleJump();
 
         if (stateComplete)
@@ -43,6 +44,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         HandleClimb();
+
         lastHorizontal = horizontal;
 
         UpdateState();
@@ -50,6 +52,11 @@ public class PlayerMove : MonoBehaviour
         if (!climbingLadder)
         {
             rb.gravityScale = 4;
+        }
+
+        if (IsOnGuard())
+        {
+            Jump(jumpForce / 2);
         }
     }
 
@@ -157,6 +164,13 @@ public class PlayerMove : MonoBehaviour
 
     }
 
+    private bool IsOnGuard()
+    {
+        Collider2D collider = Physics2D.OverlapCircle(groundCheck.transform.position, .4f);
+        return collider != null && collider.gameObject.name == "AstronautGuard";
+
+    }
+
     private void FixedUpdate()
     {
         if (climbingLadder)
@@ -193,7 +207,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded() || Input.GetKeyDown(KeyCode.Space) && climbingLadder && horizontal != 0)
         {
-            Jump();
+            Jump(jumpForce);
             climbingLadder = false;
 
 
@@ -233,9 +247,9 @@ public class PlayerMove : MonoBehaviour
     }
 
 
-    private void Jump()
+    private void Jump(float jumpStrength)
     {
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpStrength);
     }
     private void SlowFall()
     {
@@ -257,5 +271,10 @@ public class PlayerMove : MonoBehaviour
             touchingLadder = false;
         }
         
+    }
+
+    public void HitByBullet()
+    {
+        Debug.Log("AHHH OH MY GOD YOU FUKCING TAZED ME");
     }
 }
