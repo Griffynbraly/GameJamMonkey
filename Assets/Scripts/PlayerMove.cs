@@ -12,7 +12,6 @@ public class PlayerMove : MonoBehaviour
     private bool touchingLadder;
     private bool climbingLadder;
     private bool canWalkOff;
-    private bool invincible = false;
     private Vector3 currentLadderLocation;
 
     [SerializeField] private Rigidbody2D rb;
@@ -21,12 +20,15 @@ public class PlayerMove : MonoBehaviour
 
 
 
-    private enum PlayerState {Idle, Running, Airborne, Climbing}
+    private enum PlayerState { Idle, Running, Airborne, Climbing }
 
     PlayerState state;
+    private Animator animator;
     private void Start()
     {
         groundCheck = GameObject.FindGameObjectWithTag("GroundCheck").transform;
+
+        animator = GetComponentInChildren<Animator>();
     }
     private bool stateComplete;
     void Update()
@@ -80,7 +82,7 @@ public class PlayerMove : MonoBehaviour
             case PlayerState.Airborne:
                 UpdateAir();
                 break;
-            
+
         }
     }
 
@@ -113,7 +115,7 @@ public class PlayerMove : MonoBehaviour
                 StartAir();
             }
         }
-        
+
     }
     void UpdateClimb()
     {
@@ -144,23 +146,23 @@ public class PlayerMove : MonoBehaviour
             stateComplete = true;
         }
     }
-    
+
 
     void StartIdle()
     {
-        //animation;
+        animator.Play("Idle");
     }
     void StartRun()
     {
-        //animation;
+        animator.Play("Runing");
     }
     void StartAir()
     {
-        //animation;
+        animator.Play("In Air");
     }
     void StartClimb()
     {
-        //animation;
+        animator.Play("Climbing");
     }
     private bool IsGrounded()
     {
@@ -191,14 +193,14 @@ public class PlayerMove : MonoBehaviour
             {
                 rb.linearVelocity = Vector3.zero;
             }
-            
+
         }
         else
         {
             rb.linearVelocity = new Vector2(horizontal * speed, rb.linearVelocity.y);
         }
-            
-       
+
+
     }
 
     private void Flip()
@@ -238,7 +240,7 @@ public class PlayerMove : MonoBehaviour
         }
         if (climbingLadder)
         {
-            
+
             if (!IsGrounded() && climbingLadder)
             {
                 canWalkOff = true;
@@ -276,14 +278,11 @@ public class PlayerMove : MonoBehaviour
         {
             touchingLadder = false;
         }
-        
+
     }
 
     public void Killed()
     {
-        if (!invincible)
-        {
-            Debug.Log("AHHH OH MY GOD YOU FUKCING TAZED ME");
-        }
+        Debug.Log("AHHH OH MY GOD YOU FUKCING TAZED ME");
     }
 }
