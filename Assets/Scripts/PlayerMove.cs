@@ -22,6 +22,8 @@ public class PlayerMove : MonoBehaviour
 
     private enum PlayerState {Idle, Running, Airborne, Climbing}
 
+public Animator animator;
+
     PlayerState state;
     private void Start()
     {
@@ -145,21 +147,20 @@ public class PlayerMove : MonoBehaviour
     }
     
 
-    void StartIdle()
-    {
-        //animation;
+    void StartIdle() {
+        animator.Play("Idle");
     }
     void StartRun()
     {
-        //animation;
+        animator.Play("Runing");
     }
     void StartAir()
     {
-        //animation;
+       animator.Play("In Air");
     }
     void StartClimb()
     {
-        //animation;
+        animator.Play("Climbing");
     }
     private bool IsGrounded()
     {
