@@ -25,8 +25,10 @@ public class AstronautAI : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
 
+    private Animator animator;
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         state = AstronautState.Patrolling;
 
@@ -120,23 +122,23 @@ public class AstronautAI : MonoBehaviour
 
     void StartStun()
     {
-        //animation;
+        animator.Play("Falling down");
     }
     void StartScared()
     {
-        //animation;
+        animator.Play("Idle");
     }
     void StartAttack()
     {
-        //animation;
+        animator.Play("Close range");
     }
     void StartChase()
     {
-        //animation;
+        animator.Play("Running");
     }
     void StartPatrol()
     {
-        //animation;
+        animator.Play("Running");
     }
     void UpdateStun()
     {
