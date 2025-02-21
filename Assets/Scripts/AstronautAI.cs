@@ -3,8 +3,8 @@ using System.Collections;
 
 public class AstronautAI : MonoBehaviour
 {
-    private enum AstronautState { Patrolling, Chasing, Stunned, Scared, Attacking }
-    private AstronautState state;
+    public enum AstronautState { Patrolling, Chasing, Stunned, Scared, Attacking }
+    public AstronautState state { get; private set; }
 
     private bool stateComplete;
     public bool stunned;
@@ -14,6 +14,7 @@ public class AstronautAI : MonoBehaviour
     private bool isShooting;
 
     private float moveSpeed;
+    private float stunTime;
     private float velocityXSmooth = 0f;
     private float timeToHide = 999999 * 999999f;
 
@@ -54,10 +55,7 @@ public class AstronautAI : MonoBehaviour
             FlipCheck();
         if (playerInView)
             timeToHide = Time.time + 3f;
-        if (stunned)
-        {
-            stateComplete = true;
-        }
+        
     }
 
     void FixedUpdate()
@@ -98,8 +96,7 @@ public class AstronautAI : MonoBehaviour
             StartStun();
             return;
         }
-
-        if (TouchingPlayer() && playerInView)
+        else if (TouchingPlayer() && playerInView)
         {
             state = AstronautState.Attacking;
             StartAttack();
@@ -155,11 +152,15 @@ public class AstronautAI : MonoBehaviour
 
     IEnumerator StandStill()
     {
-        yield return new WaitForSeconds(1f);
+        stunTime = 1f;
+        if (stunned)
+        {
+            stunTime = 2.5f;
+        }
+        yield return new WaitForSeconds(stunTime);
         if (TouchingPlayer())
         {
             chasing = false;
-            stateComplete = true;
         }
         else if (playerInView) 
         {
@@ -171,26 +172,30 @@ public class AstronautAI : MonoBehaviour
 
     void UpdateAttack()
     {
-        if (!isShooting)
+        if (!isShooting || stunned)
         StartCoroutine(ChargeAttack());
     }
 
     IEnumerator ChargeAttack()
     {
-        isShooting = true;
-        rb.linearVelocity = Vector2.zero;
-        yield return new WaitForSeconds(0.5f);
-        Instantiate(tazeBullet, bulletOrigin.transform.position, Quaternion.LookRotation(Vector3.forward, player.transform.position - bulletOrigin.transform.position));
+        while (!stunned)
+        {
+            isShooting = true;
+            rb.linearVelocity = Vector2.zero;
+            yield return new WaitForSeconds(0.5f);
+            Instantiate(tazeBullet, bulletOrigin.transform.position, Quaternion.LookRotation(Vector3.forward, player.transform.position - bulletOrigin.transform.position));
 
-        if (!TouchingPlayer()) chasing = true;
-        isShooting = false;
-        stateComplete = true;
+            if (!TouchingPlayer()) chasing = true;
+            isShooting = false;
+            stateComplete = true;
+            break;
+        }
     }
 
     void UpdateChase()
     {
         moveSpeed = 6f;
-        if (!chasing || TouchingPlayer() || Time.time > timeToHide)
+        if (!chasing && !stunned|| TouchingPlayer() || Time.time > timeToHide || stunned)
             chasing = false;
             stateComplete = true;
     }
@@ -198,7 +203,7 @@ public class AstronautAI : MonoBehaviour
     {
         WallCheck();
         moveSpeed = 4f;
-        if (playerInView)
+        if (playerInView || stunned)
             stateComplete = true;
     }
 
@@ -224,7 +229,7 @@ public class AstronautAI : MonoBehaviour
 
     private bool TouchingWall()
     {
-        return Physics2D.OverlapCircle(rayOrigin.transform.position, 0.55f, groundLayer);
+        return Physics2D.OverlapBox(bulletOrigin.transform.position, new Vector2(.55f, 1.9f), 0f, groundLayer);
     }
 
     private bool TouchingPlayer()

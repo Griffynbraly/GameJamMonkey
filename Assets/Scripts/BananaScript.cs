@@ -2,6 +2,23 @@ using UnityEngine;
 
 public class BananaScript : MonoBehaviour
 {
+    private GameObject player; 
+    public void Start()
+    {
+        Vector3 localScale = transform.localScale;  
+        int random = Random.Range(0, 2);
+
+        if (random == 0)
+        {
+            localScale.x = 1; 
+        }
+        else
+        {
+            localScale.x = -1;  
+        }
+
+        transform.localScale = localScale;
+    }
     public void OnCollisionEnter2D(Collision2D collider)
     {
         if (collider != null)
@@ -13,12 +30,17 @@ public class BananaScript : MonoBehaviour
                 if (astroAI != null)
                 {
                     astroAI.stunned = true;
+                    Debug.Log($"{collider.gameObject.name} was stunned during their {astroAI.state} state");
                     Destroy(gameObject);
                 }
                 else
                 {
                 }
             }
+        }
+        else
+        {
+            return;
         }
     }
 }

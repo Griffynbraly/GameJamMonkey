@@ -17,26 +17,30 @@ public class tazeBullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Check if the object has only a BoxCollider2D and no other collider types
-        BoxCollider2D boxCollider = collision.GetComponent<BoxCollider2D>();
-        Collider2D[] colliders = collision.GetComponents<Collider2D>();
+        if (collision != null)
+        {
+            // Check if the object has only a BoxCollider2D and no other collider types
+            BoxCollider2D boxCollider = collision.GetComponent<BoxCollider2D>();
+            Collider2D[] colliders = collision.GetComponents<Collider2D>();
 
-        if (boxCollider.gameObject.CompareTag("Player"))
-        {
-            
-            PlayerMove playerMove = boxCollider.GetComponent<PlayerMove>();
-            if (playerMove != null)
+            if (boxCollider.gameObject.CompareTag("Player"))
             {
-                playerMove.Killed();
-                Destroy(gameObject);
+
+                PlayerMove playerMove = boxCollider.GetComponent<PlayerMove>();
+                if (playerMove != null)
+                {
+                    playerMove.Killed();
+                    Destroy(gameObject);
+                }
+            }
+            else if (boxCollider != null && colliders.Length == 1)
+            {
+                if (boxCollider.gameObject.layer == 6)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
-        else if (boxCollider != null && colliders.Length == 1)
-        {
-            if (boxCollider.gameObject.layer == 6)
-            {
-                Destroy(gameObject);
-            }
-        }
+      
     }
 }

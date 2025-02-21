@@ -12,6 +12,7 @@ public class PlayerMove : MonoBehaviour
     private bool touchingLadder;
     private bool climbingLadder;
     private bool canWalkOff;
+    private bool invincible = false;
     private Vector3 currentLadderLocation;
 
     [SerializeField] private Rigidbody2D rb;
@@ -280,6 +281,9 @@ public class PlayerMove : MonoBehaviour
 
     public void Killed()
     {
-        Debug.Log("AHHH OH MY GOD YOU FUKCING TAZED ME");
+        if (!invincible)
+        {
+            Debug.Log("AHHH OH MY GOD YOU FUKCING TAZED ME");
+        }
     }
 }
