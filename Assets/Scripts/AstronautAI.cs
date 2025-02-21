@@ -28,10 +28,12 @@ public class AstronautAI : MonoBehaviour
     private Animator animator;
     void Start()
     {
+        stunned = false;
         animator = GetComponentInChildren<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         state = AstronautState.Patrolling;
 
+        animator.Play("Running");
         if (transform.localScale.x == -1)
         {
             isFacingRight = true;

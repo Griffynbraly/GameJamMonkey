@@ -7,6 +7,7 @@ public class tazeBullet : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        StartCoroutine(DeathDelay());
     }
 
     // Update is called once per frame
@@ -41,6 +42,11 @@ public class tazeBullet : MonoBehaviour
                 }
             }
         }
-      
+    }
+
+    IEnumerator DeathDelay()
+    {
+        yield return new WaitForSeconds(2f);
+        Destroy(gameObject);
     }
 }
