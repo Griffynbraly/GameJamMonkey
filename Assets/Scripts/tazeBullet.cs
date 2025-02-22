@@ -46,7 +46,7 @@ public class tazeBullet : MonoBehaviour
 
     IEnumerator DeathDelay()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(7);
         Destroy(gameObject);
     }
 }

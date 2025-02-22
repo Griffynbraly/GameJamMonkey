@@ -4,9 +4,9 @@ using System;
 public class LadderButton : MonoBehaviour
 {
     private bool pressed = false;
-    public event Action OnButtonPress;
+    public event Action<int> OnButtonPress;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision != null)
         {
@@ -15,12 +15,13 @@ public class LadderButton : MonoBehaviour
             {
                 Pressed();
                 pressed = true;
+                
             }
         }
     }
 
     private void Pressed()
     {
-        OnButtonPress?.Invoke();
+        OnButtonPress?.Invoke(LevelManager.level);
     }
 }

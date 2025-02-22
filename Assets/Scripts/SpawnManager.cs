@@ -9,13 +9,19 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] GameObject guard;
     [SerializeField] GameObject levelBase;
     [SerializeField] GameObject levelButton;
+    [SerializeField] LevelManager levelManager;
+
+    [SerializeField] GameObject grid;
 
     [SerializeField] List<int> levelsMade = new List<int>();
+
+    [SerializeField] List<LevelData> levelDataBase = new List<LevelData>();
 
     static event Action OnLevelLoad;
     static event Action OnLevelUnLoad;
     void Start()
     {
+        
         levelsMade.Clear();
         LoadLevel(0);
     }
@@ -31,18 +37,30 @@ public class SpawnManager : MonoBehaviour
         if (levelsMade.Contains(levelNum)) { return; }
         else
         {
-            if (levelNum == 0)
-            {
-                Instantiate(levelBase, new Vector2(13, AdjustedY(0)), transform.rotation);
-                levelsMade.Add(levelNum);
-            }
+            Instantiate(levelBase, new Vector2(13, AdjustedY(0)), transform.rotation);
+            Instantiate(grid, new Vector2(0, AdjustedY(0)), transform.rotation);
+            SpawnLadderButton(levelNum);
+
+            levelsMade.Add(levelNum);
         }
         //make sure the event is called last
     }
     public void SpawnEndLadder(int levelNum)
     {
-        
+        LevelData levelData = levelDataBase[levelNum];
+        Instantiate(ladder, levelData.endLadderPos, transform.rotation);   
     }
+
+    public void SpawnLadderButton(int levelNum)
+    {
+        LevelData levelData = levelDataBase[levelNum];
+        GameObject button = Instantiate(levelButton, levelData.buttonPos, transform.rotation);
+
+        levelManager.AssignButton();
+    }
+
+    
+
 
     private float AdjustedY(float y)
     {
@@ -51,7 +69,7 @@ public class SpawnManager : MonoBehaviour
 
     public void UnLoadLevel(int levelNum)
     {
-        GameObject[] allObjects = GameObject.FindObjectsOfType<GameObject>();
+        GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
         foreach (GameObject obj in allObjects)
         {
 

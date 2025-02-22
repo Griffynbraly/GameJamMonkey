@@ -59,7 +59,7 @@ public class AstronautAI : MonoBehaviour
             FlipCheck();
         if (playerInView)
             timeToHide = Time.time + 3f;
-        
+
     }
 
     void FixedUpdate()
@@ -100,11 +100,7 @@ public class AstronautAI : MonoBehaviour
             StartStun();
             return;
         }
-        else if (TouchingPlayer() && playerInView)
-        {
-            state = AstronautState.Attacking;
-            StartAttack();
-        }
+        
         else if (chasing)
         {
             state = AstronautState.Chasing;
@@ -114,6 +110,11 @@ public class AstronautAI : MonoBehaviour
         {
             state = AstronautState.Scared;
             StartScared();
+        }
+        else if (TouchingPlayer() && playerInView)
+        {
+            state = AstronautState.Attacking;
+            StartAttack();
         }
         else
         {
@@ -188,7 +189,6 @@ public class AstronautAI : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
             yield return new WaitForSeconds(0.5f);
             Instantiate(tazeBullet, bulletOrigin.transform.position, Quaternion.LookRotation(Vector3.forward, player.transform.position - bulletOrigin.transform.position));
-
             if (!TouchingPlayer()) chasing = true;
             isShooting = false;
             stateComplete = true;
@@ -238,8 +238,15 @@ public class AstronautAI : MonoBehaviour
 
     private bool TouchingPlayer()
     {
-        Collider2D collider = Physics2D.OverlapCircle(rayOrigin.transform.position, 11f);
-        return collider != null && collider.gameObject.CompareTag("Player");
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(rayOrigin.transform.position, 11f);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.CompareTag("Player"))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void SpawnRaycast()

@@ -1,34 +1,54 @@
 using UnityEngine;
+using System.Collections;
 
 public class LevelManager : MonoBehaviour
 {
     public static int level { get; private set; }
     public bool buttonPressed = false;
-    [SerializeField] LadderButton ladderButton;
+    private LadderButton ladderButton;
     [SerializeField] SpawnManager spawnManager;
     void Start()
     {
         level = 0;
         spawnManager.LoadLevel(level);
-        AssignButton();
+        
         
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            AssignButton();
+        }
         
     }
 
-    private void ButtonPressed()
+    private void ButtonPressed( int level)
     {
         spawnManager.SpawnEndLadder(level);
     }
 
-    private void AssignButton()
+    public void AssignButton()
     {
         GameObject buttonObj = GameObject.FindGameObjectWithTag("LadderButton");
-        ladderButton = (LadderButton)buttonObj.GetComponent<LadderButton>();
-        ladderButton.OnButtonPress += ButtonPressed;
+
+        StartCoroutine(AssignButtonAfterInstantiation(buttonObj));
+
+    }
+
+    private IEnumerator AssignButtonAfterInstantiation(GameObject buttonObj)
+    {
+        yield return null;  // Wait for the next frame to ensure the object is fully initialized
+        LadderButton ladderButton = buttonObj.GetComponent<LadderButton>();
+        if (ladderButton != null)
+        {
+            ladderButton.OnButtonPress += ButtonPressed;
+        }
+        else
+        {
+            Debug.LogWarning("LadderButton component not found on the button.");
+        }
     }
 
     private void DesignButton()
