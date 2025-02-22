@@ -12,35 +12,18 @@ public class LevelManager : MonoBehaviour
         level = 0;
         spawnManager.LoadLevel(level);
         
-        
-    }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            AssignButton();
-        }
-        
     }
-
     private void ButtonPressed( int level)
     {
         spawnManager.SpawnEndLadder(level);
+        spawnManager.LoadLevel(level + 1);
     }
 
-    public void AssignButton()
+    public void AssignButton(GameObject button)
     {
-        GameObject buttonObj = GameObject.FindGameObjectWithTag("LadderButton");
 
-        StartCoroutine(AssignButtonAfterInstantiation(buttonObj));
-
-    }
-
-    private IEnumerator AssignButtonAfterInstantiation(GameObject buttonObj)
-    {
-        yield return null;  // Wait for the next frame to ensure the object is fully initialized
-        LadderButton ladderButton = buttonObj.GetComponent<LadderButton>();
+        ladderButton = button.GetComponent<LadderButton>();
         if (ladderButton != null)
         {
             ladderButton.OnButtonPress += ButtonPressed;
@@ -49,10 +32,13 @@ public class LevelManager : MonoBehaviour
         {
             Debug.LogWarning("LadderButton component not found on the button.");
         }
-    }
 
-    private void DesignButton()
+    }
+    private void OnDisable()
     {
-        ladderButton.OnButtonPress -= ButtonPressed;
+        if (ladderButton != null)
+        {
+            ladderButton.OnButtonPress -= ButtonPressed;
+        }
     }
 }

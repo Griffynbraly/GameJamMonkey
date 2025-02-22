@@ -6,7 +6,7 @@ public class LadderButton : MonoBehaviour
     private bool pressed = false;
     public event Action<int> OnButtonPress;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision != null)
         {
@@ -15,7 +15,7 @@ public class LadderButton : MonoBehaviour
             {
                 Pressed();
                 pressed = true;
-                
+                Destroy(gameObject);
             }
         }
     }
@@ -23,5 +23,6 @@ public class LadderButton : MonoBehaviour
     private void Pressed()
     {
         OnButtonPress?.Invoke(LevelManager.level);
+        Debug.Log("I got pressed");
     }
 }

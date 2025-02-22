@@ -9,6 +9,8 @@ TagManager:
   - Guard
   - GroundCheck
   - LadderButton
+  - EndLadder
+  - Taze
   layers:
   - Default
   - TransparentFX

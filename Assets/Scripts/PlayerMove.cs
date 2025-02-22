@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using System.Collections;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -12,13 +14,14 @@ public class PlayerMove : MonoBehaviour
     private bool touchingLadder;
     private bool climbingLadder;
     private bool canWalkOff;
+    private bool dead = false;
     private Vector3 currentLadderLocation;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
     private Transform groundCheck;
 
-
+    public static event Action OnPlayerDamaged;
 
     private enum PlayerState { Idle, Running, Airborne, Climbing }
 
@@ -33,10 +36,11 @@ public class PlayerMove : MonoBehaviour
     private bool stateComplete;
     void Update()
     {
-        //Debug.Log(state);
-        horizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
-
+        if (!dead)
+        {
+            horizontal = Input.GetAxisRaw("Horizontal");
+            vertical = Input.GetAxisRaw("Vertical");
+        }
         if (horizontal != lastHorizontal)
         {
             Flip();
@@ -64,6 +68,7 @@ public class PlayerMove : MonoBehaviour
         {
             Jump(jumpForce / 2);
         }
+
     }
 
     void UpdateState()
@@ -89,33 +94,39 @@ public class PlayerMove : MonoBehaviour
     void SelectState()
     {
         stateComplete = false;
-        if (climbingLadder)
+        if (dead)
         {
-            state = PlayerState.Climbing;
-            StartClimb();
+            StartDeath();
         }
         else
         {
-            if (IsGrounded())
+            if (climbingLadder)
             {
-                if (rb.linearVelocity.x == 0)
-                {
-                    state = PlayerState.Idle;
-                    StartIdle();
-                }
-                else
-                {
-                    state = PlayerState.Running;
-                    StartRun();
-                }
+                state = PlayerState.Climbing;
+                StartClimb();
             }
             else
             {
-                state = PlayerState.Airborne;
-                StartAir();
+                if (IsGrounded())
+                {
+                    if (rb.linearVelocity.x == 0)
+                    {
+                        state = PlayerState.Idle;
+                        StartIdle();
+                    }
+                    else
+                    {
+                        state = PlayerState.Running;
+                        StartRun();
+                    }
+                }
+                else
+                {
+                    state = PlayerState.Airborne;
+                    StartAir();
+                }
             }
-        }
-
+        }        
     }
     void UpdateClimb()
     {
@@ -163,6 +174,11 @@ public class PlayerMove : MonoBehaviour
     void StartClimb()
     {
         animator.Play("Climbing");
+    }
+    void StartDeath()
+    {
+        animator.Play("ELectricuted");
+        
     }
     private bool IsGrounded()
     {
@@ -283,6 +299,20 @@ public class PlayerMove : MonoBehaviour
 
     public void Killed()
     {
+        if (!dead)
+        {
+            OnPlayerDamaged?.Invoke();
+            StartCoroutine(DeathDelay());
+        }
+        
+        dead = true;
+        stateComplete = true;
         Debug.Log("AHHH OH MY GOD YOU FUKCING TAZED ME");
+    }
+
+    IEnumerator DeathDelay()
+    {
+        yield return new WaitForSeconds(.5f);
+        Destroy(gameObject);
     }
 }

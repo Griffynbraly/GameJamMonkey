@@ -10,16 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a910852551b4654ebd71a901804cdde, type: 3}
-  m_Name: 0
+  m_Name: 1
   m_EditorClassIdentifier: 
-  endLadderPos: {x: 6, y: 2}
-  buttonPos: {x: -11.5, y: -6}
-  playerSpawn: {x: 4.5, y: -4}
+  endLadderPos: {x: -10, y: 2}
+  buttonPos: {x: -5, y: -6}
+  playerSpawn: {x: 10, y: -4}
   dimensionsInLevel:
-  - {x: 2, y: 3}
+  - {x: 6, y: 1}
   objectPositions:
-  - {x: -2, y: -4.5}
+  - {x: 0, y: -0.5}
   guardPositions:
-  - {x: -6, y: -4.04}
-  climbablePositions: []
-  climbableDimensions: []
+  - {x: -7, y: -4.04}
+  climbablePositions:
+  - {x: 10, y: -2}
+  - {x: -7.5, y: -0.5}
+  climbableDimensions:
+  - {x: 2, y: 8}
+  - {x: 2, y: 1}

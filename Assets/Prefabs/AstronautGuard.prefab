@@ -283,7 +283,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 0
   m_CollisionDetection: 1
-  m_Constraints: 4
+  m_Constraints: 6
 --- !u!114 &580471869064634690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,7 +299,7 @@ MonoBehaviour:
   stunned: 0
   rayOrigin: {fileID: 3734575643556315471}
   bulletOrigin: {fileID: 1222330368959740331}
-  tazeBullet: {fileID: 1184903738143077051, guid: 0601d2f042ec596499abb25d048f5632, type: 3}
+  tazeBullet: {fileID: 1184903738143077051, guid: a63cbac5035d8d14cb1745c7b99faa10, type: 3}
   rb: {fileID: 9067290426379641533}
   groundLayer:
     serializedVersion: 2
