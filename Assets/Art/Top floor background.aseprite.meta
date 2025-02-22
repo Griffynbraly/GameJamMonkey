@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0dbb6dc7e1d9643b8a6eea28cbf6f312
+guid: 3a0b7b76ada99d145bb9210a8f021431
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -36,7 +36,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 16
+    spritePixelsToUnits: 100
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -98,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638758184269867751
+  platformSettingsDirtyTick: 638758184758752634
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -123,9 +123,9 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: EMpty banana
+  - name: Top floor background
     originalName: 
-    pivot: {x: 0.5769231, y: 0.43478262}
+    pivot: {x: 0.5, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -133,9 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 26
-      height: 23
-    spriteID: 9ebb46ef2abb748a491070c2fc215eef
+      width: 384
+      height: 196
+    spriteID: 6e6ba6edf121d3547981bf6cd92c7f7a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -147,21 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -1128168964
-    name: EMpty banana
+    guid: 682121053
+    name: Top floor background
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: EMpty banana
+    - name: Top floor background
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 1
-        y: 6
-        width: 26
-        height: 23
-      spriteId: 9ebb46ef2abb748a491070c2fc215eef
+        x: 0
+        y: 0
+        width: 384
+        height: 196
+      spriteId: 6e6ba6edf121d3547981bf6cd92c7f7a
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -204,5 +204,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 64, y: 32}
+  canvasSize: {x: 384, y: 196}
+  previousTextureSize: {x: 512, y: 256}

@@ -21,7 +21,7 @@ public class ClimbableScript : MoldBaseScript
         {
             spriteRenderer.sprite = spriteList[3];
         }
-        if (spriteScale == new Vector2(1, 2))
+        if (spriteScale == new Vector2(2, 1))
         {
             spriteRenderer.sprite = spriteList[4];
         }

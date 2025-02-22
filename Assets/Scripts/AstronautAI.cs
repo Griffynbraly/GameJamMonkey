@@ -29,6 +29,7 @@ public class AstronautAI : MonoBehaviour
     private Animator animator;
     void Start()
     {
+        PlayerMove.OnLevelArrive += PlayerArrive;
         PlayerMove.OnPlayerDamaged += PlayerDamaged;
         stunned = false;
         animator = GetComponentInChildren<Animator>();
@@ -37,17 +38,17 @@ public class AstronautAI : MonoBehaviour
         {
             Debug.LogWarning("couldnt find yo shit");
         }
-        if (transform.position.y < 6)
+        if (transform.position.y < ((LevelManager.level * 16) - 2) || LevelManager.level == 0)
         {
             state = AstronautState.Patrolling;
+            animator.Play("Running");
         }
         else
         {
             state = AstronautState.Idle;
+            animator.Play("Idle");
         }
-        
 
-        animator.Play("Running");
         if (transform.localScale.x == -1)
         {
             isFacingRight = true;
@@ -81,18 +82,22 @@ public class AstronautAI : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (state == AstronautState.Patrolling || state == AstronautState.Chasing)
+        if (!tazedPlayer)
         {
-            int direction = isFacingRight ? 1 : -1;
-            float targetVelocityX = direction * moveSpeed;
-            float smoothTime = state == AstronautState.Chasing ? 0.1f : 0f;
+            if (state == AstronautState.Patrolling || state == AstronautState.Chasing)
+            {
+                int direction = isFacingRight ? 1 : -1;
+                float targetVelocityX = direction * moveSpeed;
+                float smoothTime = state == AstronautState.Chasing ? 0.1f : 0f;
 
-            float newVelocityX = Mathf.SmoothDamp(rb.linearVelocity.x, targetVelocityX, ref velocityXSmooth, smoothTime);
-            rb.linearVelocity = new Vector2(newVelocityX, rb.linearVelocity.y);
+                float newVelocityX = Mathf.SmoothDamp(rb.linearVelocity.x, targetVelocityX, ref velocityXSmooth, smoothTime);
+                rb.linearVelocity = new Vector2(newVelocityX, rb.linearVelocity.y);
 
-            if (state == AstronautState.Chasing)
-                AdjustFacingDirection();
+                if (state == AstronautState.Chasing)
+                    AdjustFacingDirection();
+            }
         }
+        
     }
 
     void UpdateState()
@@ -114,6 +119,11 @@ public class AstronautAI : MonoBehaviour
         tazedPlayer = true;
         stateComplete = true;
         PlayerMove.OnPlayerDamaged -= PlayerDamaged;
+    }
+
+    private void PlayerArrive()
+    {
+        stateComplete = true;
     }
 
     void SelectState()
@@ -366,6 +376,7 @@ public class AstronautAI : MonoBehaviour
     private void OnDisable()
     {
         PlayerMove.OnPlayerDamaged -= PlayerDamaged;
+        PlayerMove.OnLevelArrive -= PlayerArrive;
     }
 
 }

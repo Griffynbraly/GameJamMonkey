@@ -33,23 +33,23 @@ public class SpawnManager : MonoBehaviour
         PlayerMove.OnPlayerDamaged += PlayerDamaged;
         SpawnPlayer(levelToLoad);
         levelsMade.Clear();
-        LoadLevel(levelToLoad);
         LoadFloor();
     }
     public void LoadLevel(int levelNum)
     {
         if (!levelsMade.Contains(levelNum))
         {
-            levelToLoad = levelNum;
+            
             Debug.Log($"I am loading level {levelNum} ");
+            LoadGuards(levelNum);
             LoadLevelBase();
 
-            LoadGuards(levelNum);
+            
             LoadObjectMolds(levelNum);
             LoadClimbMolds(levelNum);
             SpawnLadderButton(levelNum);
 
-            levelsMade.Add(levelNum);
+            //levelsMade.Add(levelNum);
 
             OnLevelLoad?.Invoke();
         }
@@ -58,7 +58,6 @@ public class SpawnManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(levelToLoad);
     }
     private void LoadLevelBase()
     {
@@ -71,6 +70,11 @@ public class SpawnManager : MonoBehaviour
     }
     private void LoadGuards(int levelNum)
     {
+        if (levelToLoad != levelNum)
+        {
+            levelToLoad = levelNum;
+        }
+        
         foreach (var pos in levelDataBase[levelNum].guardPositions)
         {
             Instantiate(guard, new Vector2(pos.x, AdjustedY(pos.y)), transform.rotation);
@@ -79,6 +83,10 @@ public class SpawnManager : MonoBehaviour
 
     private void LoadObjectMolds(int levelNum)
     {
+        if (levelToLoad != levelNum)
+        {
+            levelToLoad = levelNum;
+        }
         foreach (var pos in levelDataBase[levelNum].objectPositions)
         {
             GameObject instantiated = Instantiate(objectMold, new Vector2(pos.x, AdjustedY(pos.y)), transform.rotation);
@@ -105,16 +113,28 @@ public class SpawnManager : MonoBehaviour
     }
     public void SpawnPlayer(int levelNum)
     {
+        if (levelToLoad != levelNum)
+        {
+            levelToLoad = levelNum;
+        }
         Instantiate(player, new Vector2(levelDataBase[levelNum].playerSpawn.x, AdjustedY(levelDataBase[levelNum].playerSpawn.y)), transform.rotation);
     }
     public void SpawnEndLadder(int levelNum)
     {
+        if (levelToLoad != levelNum)
+        {
+            levelToLoad = levelNum;
+        }
         LevelData levelData = levelDataBase[levelNum];
         Instantiate(ladder, new Vector2(levelData.endLadderPos.x, AdjustedY(levelData.endLadderPos.y)), transform.rotation);   
     }
 
     private void LoadClimbMolds(int levelNum)
     {
+        if (levelToLoad != levelNum)
+        {
+            levelToLoad = levelNum;
+        }
         foreach (var pos in levelDataBase[levelNum].climbablePositions)
         {
             GameObject instantiated = Instantiate(climbMold, new Vector2(pos.x, AdjustedY(pos.y)), transform.rotation);
@@ -141,7 +161,6 @@ public class SpawnManager : MonoBehaviour
     {
         return y + (16 * levelToLoad);
     }
-
     public void UnLoadLevel(int levelNum)
     {
         GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
@@ -173,7 +192,17 @@ public class SpawnManager : MonoBehaviour
         LoadGuards(LevelManager.level);
         SpawnPlayer(LevelManager.level);
     }
-
+    public void DestroyEndLadder()
+    {
+        GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name.Contains("EndLadder"))
+            {
+                Destroy(obj);
+            }
+        }
+    }
     private void OnDisable()
     {
         PlayerMove.OnPlayerDamaged -= PlayerDamaged;

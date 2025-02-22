@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] SpawnManager spawnManager;
     void Start()
     {
+        PlayerMove.OnLevelArrive += PlayerArrive;
         level = 0;
         spawnManager.LoadLevel(level);
         
@@ -18,6 +19,12 @@ public class LevelManager : MonoBehaviour
     {
         spawnManager.SpawnEndLadder(level);
         spawnManager.LoadLevel(level + 1);
+    }
+    private void PlayerArrive()
+    {
+        level += 1;
+        spawnManager.DestroyEndLadder();
+        spawnManager.LoadFloor();
     }
 
     public void AssignButton(GameObject button)
@@ -40,5 +47,6 @@ public class LevelManager : MonoBehaviour
         {
             ladderButton.OnButtonPress -= ButtonPressed;
         }
+        PlayerMove.OnLevelArrive -= PlayerArrive;
     }
 }

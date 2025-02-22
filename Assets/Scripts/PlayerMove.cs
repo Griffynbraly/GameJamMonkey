@@ -22,6 +22,7 @@ public class PlayerMove : MonoBehaviour
     private Transform groundCheck;
 
     public static event Action OnPlayerDamaged;
+    public static event Action OnLevelArrive;
 
     private enum PlayerState { Idle, Running, Airborne, Climbing }
 
@@ -294,7 +295,10 @@ public class PlayerMove : MonoBehaviour
         {
             touchingLadder = false;
         }
-
+        if (other.name.Contains("EndLadder") && transform.position.y > (((LevelManager.level + 1) * 16) - 6))
+        {
+            OnLevelArrive?.Invoke();
+        }
     }
 
     public void Killed()
