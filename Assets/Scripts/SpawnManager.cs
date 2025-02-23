@@ -182,7 +182,7 @@ public class SpawnManager : MonoBehaviour
 
             if (obj.transform.position.y < ((LevelManager.level * 16) - 10))
             {
-                if (obj.CompareTag("Guard") || obj.CompareTag("Climbable") || obj.CompareTag("Walkable") || obj.CompareTag("Banana") || obj.CompareTag("LadderButton") || obj.layer == 6 || obj.CompareTag("Tile"))
+                if (obj.CompareTag("Guard") || obj.CompareTag("Climbable") || obj.CompareTag("Walkable") || obj.CompareTag("Banana") || obj.CompareTag("LadderButton") || obj.layer == 6 || obj.CompareTag("Tile") || obj.CompareTag("Player"))
                 {
                     Destroy(obj);
                 }

@@ -386,7 +386,7 @@ public class AstronautAI : MonoBehaviour
                 {
                     if (state == AstronautState.Chasing || state == AstronautState.Attacking)
                     {
-                        //playerMove.Killed();
+                        playerMove.Killed();
                     }
                 }
             }
