@@ -148,8 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4704b52657b6a0846a09843aeef32101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 3624889495449645665, guid: 1d30cc1b4db17e84587c414f93776320, type: 3}
-  ladder: {fileID: 9020039652919806430, guid: 10902b8346b3dc04994a6c5beae6e94e, type: 3}
+  player: {fileID: 3624889495449645665, guid: 22acd9bc63506914c810dcba2f34afe8, type: 3}
+  ladder: {fileID: 4937824095821784455, guid: 62d989af7124306479351d0fa41c2d1f, type: 3}
   guard: {fileID: 4234517107912351351, guid: 759c72d9b2f2ebc4d8b7a55de75a971c, type: 3}
   levelBase: {fileID: 7579422455127524780, guid: 694b0bcb75b2eeb49896ea5fee6dcffe, type: 3}
   levelFloor: {fileID: 5444301723315242517, guid: 097bced0b78b9b04b8ad0ff72ff7f091, type: 3}
@@ -158,7 +158,7 @@ MonoBehaviour:
   objectMold: {fileID: 4821364128014793632, guid: 1e364a1e14aa20b4dbb777e38f576e28, type: 3}
   climbMold: {fileID: 8273630046663101420, guid: 73803aaa418de0c49b0885e0c033c37b, type: 3}
   grid: {fileID: 8696992390415164362, guid: 641aeda6b97a0ee4780e2c06c2328e62, type: 3}
-  topBackGround: {fileID: 0}
+  topBackGround: {fileID: 1370699073219825598, guid: 14dbcbd651628e049950d3607a599d80, type: 3}
   levelDataBase:
   - {fileID: 11400000, guid: 1cb040ba8d4e7c84d8e88e258e85fc45, type: 2}
   - {fileID: 11400000, guid: 4e91dda833e07164185163fcce3f4402, type: 2}
@@ -730,7 +730,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3258396789535633833, guid: c0c9ea7058ed34035b3cc6f8008137be, type: 3}
+  m_Sprite: {fileID: -1923509135560821392, guid: c0c9ea7058ed34035b3cc6f8008137be, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1031,7 +1031,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 15, y: 7}
+  m_AnchoredPosition: {x: -83, y: 14}
   m_SizeDelta: {x: 989.5458, y: 659.8228}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &526908218
@@ -1119,7 +1119,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 368.73828, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2605,7 +2605,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1450857248
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2623,7 +2623,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 79, y: -7}
+  m_AnchoredPosition: {x: 67, y: 0}
   m_SizeDelta: {x: 989.5458, y: 659.8228}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1450857249
@@ -2711,7 +2711,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 266.47113, y: 0, z: 95.06531, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2950,7 +2950,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5371637211946599821, guid: 898cc88ca58765e4e830ad3ee260c1df, type: 3}
+  m_Sprite: {fileID: 5117890494344684977, guid: 898cc88ca58765e4e830ad3ee260c1df, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
