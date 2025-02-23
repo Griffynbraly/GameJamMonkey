@@ -208,6 +208,7 @@ Transform:
   m_Children:
   - {fileID: 2843147995867529172}
   - {fileID: 8440474415755516989}
+  - {fileID: 1780640031747717301}
   - {fileID: 4664592343384992037}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -298,12 +299,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stunned: 0
   rayOrigin: {fileID: 3734575643556315471}
+  groundCheck: {fileID: 4782557288723216922}
   bulletOrigin: {fileID: 1222330368959740331}
   tazeBullet: {fileID: 1184903738143077051, guid: a63cbac5035d8d14cb1745c7b99faa10, type: 3}
   rb: {fileID: 9067290426379641533}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+--- !u!1 &4782557288723216922
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1780640031747717301}
+  m_Layer: 0
+  m_Name: groundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1780640031747717301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4782557288723216922}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.17, y: -2.17, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 293408120673527386}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3309710157885232680
 PrefabInstance:
   m_ObjectHideFlags: 0

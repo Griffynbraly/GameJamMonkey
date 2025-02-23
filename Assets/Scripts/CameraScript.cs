@@ -37,7 +37,7 @@ public class CameraScript : MonoBehaviour
     {
         yield return new WaitForSeconds(0.005f);
         targetPosition = new Vector3(transform.position.x, Y(), transform.position.z);
-        Debug.Log("Camera is moving");
+ 
         isMoving = true;
         while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
         {

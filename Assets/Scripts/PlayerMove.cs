@@ -67,7 +67,7 @@ public class PlayerMove : MonoBehaviour
 
         if (IsOnGuard())
         {
-            Jump(jumpForce / 2);
+            Jump(jumpForce / 1.5f);
         }
 
     }
@@ -189,7 +189,7 @@ public class PlayerMove : MonoBehaviour
 
     private bool IsOnGuard()
     {
-        Collider2D collider = Physics2D.OverlapCircle(groundCheck.transform.position, .4f);
+        Collider2D collider = Physics2D.OverlapCircle(groundCheck.transform.position, .5f);
         if (collider != null)
         {
             return collider.CompareTag("Guard");

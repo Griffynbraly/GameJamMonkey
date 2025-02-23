@@ -15,7 +15,6 @@ public class AstronautAI : MonoBehaviour
     private bool tazedPlayer = false;
 
     private float moveSpeed;
-    private float stunTime;
     private float velocityXSmooth = 0f;
     private float timeToHide = 999999 * 999999f;
 
@@ -38,15 +37,17 @@ public class AstronautAI : MonoBehaviour
         {
             Debug.LogWarning("couldnt find yo shit");
         }
-        if (transform.position.y < ((LevelManager.level * 16) - 2) || LevelManager.level == 0)
+        if (transform.position.y < (((LevelManager.level + 1) * 16) - 6))
         {
             state = AstronautState.Patrolling;
             animator.Play("Running");
+           
         }
         else
         {
             state = AstronautState.Idle;
             animator.Play("Idle");
+
         }
 
         if (transform.localScale.x == -1)
@@ -74,10 +75,13 @@ public class AstronautAI : MonoBehaviour
 
             if (!stunned && !chasing)
                 FlipCheck();
-            if (playerInView)
+            if (playerInView || playerInView && TouchingPlayer())
                 timeToHide = Time.time + 3f;
+            if (stunned)
+            {
+                state = AstronautState.Stunned;
+            }
         }
-
     }
 
     void FixedUpdate()
@@ -104,6 +108,7 @@ public class AstronautAI : MonoBehaviour
     {
         switch (state)
         {
+            
             case AstronautState.Accomplished: break;
             case AstronautState.Stunned: UpdateStun(); break;
             case AstronautState.Scared: UpdateScared(); break;
@@ -111,6 +116,7 @@ public class AstronautAI : MonoBehaviour
             case AstronautState.Chasing: UpdateChase(); break;
             case AstronautState.Patrolling: UpdatePatrol(); break;
             case AstronautState.Idle: UpdateIdle(); break;
+
         }
     }
 
@@ -140,8 +146,6 @@ public class AstronautAI : MonoBehaviour
             if (stunned)
             {
                 state = AstronautState.Stunned;
-                StartStun();
-                return;
             }
 
             else if (chasing)
@@ -167,10 +171,7 @@ public class AstronautAI : MonoBehaviour
         }
     }
 
-    void StartStun()
-    {
-        animator.Play("Falling down");
-    }
+ 
     void StartScared()
     {
         animator.Play("Idle");
@@ -192,7 +193,11 @@ public class AstronautAI : MonoBehaviour
     void UpdateStun()
     {
         rb.linearVelocity = Vector2.zero;
-        StartCoroutine(StandStill());
+        if (stunned)
+        {
+            StartCoroutine(StandStill());
+        }
+        
     }
     void UpdateIdle()
     {
@@ -207,13 +212,20 @@ public class AstronautAI : MonoBehaviour
 
     IEnumerator StandStill()
     {
-        stunTime = 1f;
-        if (stunned)
+        if (!stunned)
         {
-            stunTime = 2.5f;
+            yield return new WaitForSeconds(1);
         }
-        yield return new WaitForSeconds(stunTime);
-        if (TouchingPlayer())
+        else
+        {
+            animator.Play("Falling down");
+            yield return new WaitForSeconds(1.25f);
+            animator.Play("Getting up");
+            yield return new WaitForSeconds(1.25f);
+            
+        }
+        
+        if (TouchingPlayer() && playerInView)
         {
             chasing = false;
         }
@@ -221,14 +233,21 @@ public class AstronautAI : MonoBehaviour
         {
             chasing = true;
         }
-        stunned = false;
+        
         stateComplete = true;
+        stunned = false;
     }
 
     void UpdateAttack()
     {
-        if (!isShooting || stunned)
-        StartCoroutine(ChargeAttack());
+        if (!isShooting && !stunned)
+        {
+            StartCoroutine(ChargeAttack());
+        }
+        else if (stunned)
+        {
+            stateComplete = true;
+        }
     }
 
     IEnumerator ChargeAttack()
@@ -263,6 +282,7 @@ public class AstronautAI : MonoBehaviour
 
     void FlipCheck()
     {
+       
         if ((isFacingRight && rb.linearVelocity.x < 0) || (!isFacingRight && rb.linearVelocity.x > 0))
             Flip();
     }
@@ -285,7 +305,6 @@ public class AstronautAI : MonoBehaviour
     {
         return Physics2D.OverlapBox(bulletOrigin.transform.position, new Vector2(.55f, 1.9f), 0f, groundLayer);
     }
-
     private bool TouchingPlayer()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(rayOrigin.transform.position, 8f);
@@ -306,34 +325,39 @@ public class AstronautAI : MonoBehaviour
             Vector2 direction = (player.transform.position - rayOrigin.transform.position).normalized;
             float distance = Vector2.Distance(rayOrigin.transform.position, player.transform.position);
             float angle = Vector2.SignedAngle(transform.right, direction);
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin.transform.position, direction, distance);
+
+            // Get all hits along the ray path
+            RaycastHit2D[] hits = Physics2D.RaycastAll(rayOrigin.transform.position, direction, distance);
             Debug.DrawRay(rayOrigin.transform.position, direction * distance, Color.red);
-            if (hit.collider != null)
+
+            bool playerSeen = false;
+            bool blocked = false;
+
+            foreach (RaycastHit2D hit in hits)
             {
-                if (hit.collider.gameObject.CompareTag("Player"))
+                if (hit.collider.gameObject.layer == 6 || hit.collider.CompareTag("Guard"))
                 {
-
-                    if (!chasing)
-                    {
-                        playerInView = isFacingRight ? angle < 140 : angle < 30;
-                    }
-                    else
-                    {
-                        playerInView = true;
-                    }
-                }
-                else
-                {
-                    playerInView = false;
+                    blocked = true; // The ground is blocking the view
+                    break; // No need to check further, we already know it's blocked
                 }
 
+                if (hit.collider.CompareTag("Player"))
+                {
+                    playerSeen = true;
+                    break; // No need to check further, we already found the player
+                }
             }
+
+            // If player is seen and not blocked by ground, they're in view
+            playerInView = playerSeen && !blocked;
         }
         else
         {
-            playerInView = false;
+            playerInView = false; // No player reference
         }
     }
+
+
 
     private void AdjustFacingDirection()
     {

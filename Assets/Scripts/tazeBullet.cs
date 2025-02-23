@@ -24,21 +24,24 @@ public class tazeBullet : MonoBehaviour
             BoxCollider2D boxCollider = collision.GetComponent<BoxCollider2D>();
             Collider2D[] colliders = collision.GetComponents<Collider2D>();
 
-            if (boxCollider.gameObject.CompareTag("Player"))
+            if (boxCollider != null)
             {
+                if (boxCollider.gameObject.CompareTag("Player"))
+                {
 
-                PlayerMove playerMove = boxCollider.GetComponent<PlayerMove>();
-                if (playerMove != null)
-                {
-                    playerMove.Killed();
-                    Destroy(gameObject);
+                    PlayerMove playerMove = boxCollider.GetComponent<PlayerMove>();
+                    if (playerMove != null)
+                    {
+                        playerMove.Killed();
+                        Destroy(gameObject);
+                    }
                 }
-            }
-            else if (boxCollider != null && colliders.Length == 1)
-            {
-                if (boxCollider.gameObject.layer == 6)
+                else if (boxCollider != null && colliders.Length == 1)
                 {
-                    Destroy(gameObject);
+                    if (boxCollider.gameObject.layer == 6)
+                    {
+                        Destroy(gameObject);
+                    }
                 }
             }
         }

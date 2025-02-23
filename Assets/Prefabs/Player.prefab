@@ -138,9 +138,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3372cb1592890574b8fb31321bdb5136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bananaPrefab: {fileID: 7484325193729762494, guid: 94f438a1d489f3a4db1394173137f70e, type: 3}
+  hasBanana: 1
+  bananaPrefab: {fileID: 7484325193729762494, guid: 5a91cb493d936e84abd87949564c5a36, type: 3}
   playerTransform: {fileID: 1547989030785357344}
   playerDirectionTimes: -2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &5508204421751916008
 GameObject:
   m_ObjectHideFlags: 0

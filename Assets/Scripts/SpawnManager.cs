@@ -19,53 +19,50 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] GameObject grid;
 
-    [SerializeField] List<int> levelsMade = new List<int>();
+    
 
     [SerializeField] List<LevelData> levelDataBase = new List<LevelData>();
 
     private int levelToLoad;
 
     static event Action OnLevelLoad;
-    static event Action OnLevelUnLoad;
     void Start()
     {
+        
         levelToLoad = 0;
         PlayerMove.OnPlayerDamaged += PlayerDamaged;
         SpawnPlayer(levelToLoad);
-        levelsMade.Clear();
-        LoadFloor();
+        LoadFloor(levelToLoad);
     }
     public void LoadLevel(int levelNum)
     {
-        if (!levelsMade.Contains(levelNum))
-        {
-            
-            Debug.Log($"I am loading level {levelNum} ");
-            LoadGuards(levelNum);
-            LoadLevelBase();
+        LoadGuards(levelNum);
 
-            
-            LoadObjectMolds(levelNum);
-            LoadClimbMolds(levelNum);
-            SpawnLadderButton(levelNum);
-
-            //levelsMade.Add(levelNum);
-
-            OnLevelLoad?.Invoke();
-        }
+        LoadObjectMolds(levelNum);
+        LoadClimbMolds(levelNum);
+        SpawnLadderButton(levelNum);
+        Debug.Log($"LoadingLevel {levelNum}");
+        OnLevelLoad?.Invoke();
+     
         //make sure the event is called last
     }
 
     private void Update()
     {
     }
-    private void LoadLevelBase()
+    public void LoadLevelBase(int levelNum)
     {
         Instantiate(levelBase, new Vector2(13, AdjustedY(0)), transform.rotation);
         Instantiate(grid, new Vector2(0, AdjustedY(0)), transform.rotation);
+
+        Debug.Log($"LoadingBase {levelNum}");
     }
-    public void LoadFloor()
+    public void LoadFloor(int levelNum)
     {
+        if (levelToLoad != levelNum)
+        {
+            levelToLoad = levelNum;
+        }
         Instantiate(levelFloor, new Vector2(0, AdjustedY(-8)), transform.rotation);
     }
     private void LoadGuards(int levelNum)
@@ -108,6 +105,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator ReloadWait()
     {
+        LevelManager.levelsMade.Clear();    
         yield return new WaitForSeconds(1);
         Restart();
     }
@@ -161,17 +159,19 @@ public class SpawnManager : MonoBehaviour
     {
         return y + (16 * levelToLoad);
     }
-    public void UnLoadLevel(int levelNum)
+    public void UnloadPrevious()
     {
         GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
         foreach (GameObject obj in allObjects)
         {
 
-            if (obj.CompareTag("Player"))
+            if (obj.transform.position.y < ((LevelManager.level * 16) - 10))
             {
-                break;
+                if (obj.CompareTag("Guard") || obj.CompareTag("Climbable") || obj.CompareTag("Walkable") || obj.CompareTag("Banana") || obj.CompareTag("LadderButton") || obj.layer == 6 || obj.CompareTag("Tile"))
+                {
+                    Destroy(obj);
+                }
             }
-            Destroy(obj);
         }
         //make sure the event is called last
     }
@@ -182,14 +182,12 @@ public class SpawnManager : MonoBehaviour
         GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
         foreach (GameObject obj in allObjects)
         {
-            if (obj.CompareTag("Guard") || obj.CompareTag("LadderButton") || obj.CompareTag("Climbable") || obj.CompareTag("Taze") || obj.CompareTag("Banana"))
+            if (obj.CompareTag("Guard") || obj.CompareTag("LadderButton") || obj.CompareTag("Climbable") || obj.CompareTag("Taze") || obj.CompareTag("Banana") || obj.CompareTag("Walkable"))
             {
                 Destroy(obj);
             }
         }
-        LoadClimbMolds(LevelManager.level);
-        SpawnLadderButton(LevelManager.level);
-        LoadGuards(LevelManager.level);
+        LoadLevel(LevelManager.level);
         SpawnPlayer(LevelManager.level);
     }
     public void DestroyEndLadder()

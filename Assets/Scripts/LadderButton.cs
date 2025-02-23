@@ -23,6 +23,5 @@ public class LadderButton : MonoBehaviour
     private void Pressed()
     {
         OnButtonPress?.Invoke(LevelManager.level);
-        Debug.Log("I got pressed");
     }
 }

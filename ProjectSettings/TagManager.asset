@@ -9,8 +9,9 @@ TagManager:
   - Guard
   - GroundCheck
   - LadderButton
-  - EndLadder
   - Taze
+  - Walkable
+  - Tile
   layers:
   - Default
   - TransparentFX

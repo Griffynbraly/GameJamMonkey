@@ -5,7 +5,7 @@ public class MoldBaseScript : MonoBehaviour
 {
     [SerializeField] protected SpriteRenderer spriteRenderer;
     [SerializeField] protected List<Sprite> spriteList = new List<Sprite>();
-    [SerializeField] BoxCollider2D boxCollider;
+    [SerializeField] public BoxCollider2D boxCollider;
 
     public void SetScale(Vector2 newScale)
     {
@@ -34,6 +34,18 @@ public class MoldBaseScript : MonoBehaviour
         if (spriteScale == new Vector2(1, 2))
         {
             spriteRenderer.sprite = spriteList[4];
+        }
+        if (spriteScale == new Vector2(1, 1))
+        {
+            spriteRenderer.sprite = spriteList[5];
+        }
+        if (spriteScale == new Vector2(4, 2))
+        {
+            spriteRenderer.sprite = spriteList[6];
+        }
+        if (spriteScale == new Vector2(2, 1))
+        {
+            spriteRenderer.sprite = spriteList[7];
         }
     }
 }

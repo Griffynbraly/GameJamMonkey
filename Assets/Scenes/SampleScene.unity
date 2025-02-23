@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4704b52657b6a0846a09843aeef32101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 3624889495449645665, guid: 1d30cc1b4db17e84587c414f93776320, type: 3}
+  player: {fileID: 3624889495449645665, guid: 22acd9bc63506914c810dcba2f34afe8, type: 3}
   ladder: {fileID: 4937824095821784455, guid: 62d989af7124306479351d0fa41c2d1f, type: 3}
   guard: {fileID: 4234517107912351351, guid: 759c72d9b2f2ebc4d8b7a55de75a971c, type: 3}
   levelBase: {fileID: 7579422455127524780, guid: 694b0bcb75b2eeb49896ea5fee6dcffe, type: 3}
@@ -158,10 +158,17 @@ MonoBehaviour:
   objectMold: {fileID: 4821364128014793632, guid: 1e364a1e14aa20b4dbb777e38f576e28, type: 3}
   climbMold: {fileID: 8273630046663101420, guid: 73803aaa418de0c49b0885e0c033c37b, type: 3}
   grid: {fileID: 8696992390415164362, guid: 641aeda6b97a0ee4780e2c06c2328e62, type: 3}
-  levelsMade: 
   levelDataBase:
   - {fileID: 11400000, guid: 1cb040ba8d4e7c84d8e88e258e85fc45, type: 2}
   - {fileID: 11400000, guid: 4e91dda833e07164185163fcce3f4402, type: 2}
+  - {fileID: 11400000, guid: 88a697308ed11ec4aae5204779435c9b, type: 2}
+  - {fileID: 11400000, guid: 57c839a22735f834c9719642838afcea, type: 2}
+  - {fileID: 11400000, guid: a5f8affa8bb78de4fb9337573d8d6040, type: 2}
+  - {fileID: 11400000, guid: c0530cca700c3d345a16a6b5f203be5a, type: 2}
+  - {fileID: 11400000, guid: 221cb5c5fa382ed46b4335f7925a6c43, type: 2}
+  - {fileID: 11400000, guid: aa7297eb79b985945b4503e8d1f1d214, type: 2}
+  - {fileID: 11400000, guid: 1c60ad698022bc84ba2c247b02a3c395, type: 2}
+  - {fileID: 11400000, guid: d73269fc8225d964bbd8f51d067244ed, type: 2}
 --- !u!4 &3157368
 Transform:
   m_ObjectHideFlags: 0

@@ -30,7 +30,7 @@ public class BananaScript : MonoBehaviour
                 if (astroAI != null)
                 {
                     astroAI.stunned = true;
-                    Debug.Log($"{collider.gameObject.name} was stunned during their {astroAI.state} state");
+                   
                     Destroy(gameObject);
                 }
                 else
