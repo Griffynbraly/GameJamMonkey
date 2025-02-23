@@ -410,9 +410,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'SPace Monkey BY
+  m_text: 'Space Monkey
 
-    KAi and Griffyn'
+    By Kai and Griffyn'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8be7ee1315036431f8f4f8b2adc1ec51, type: 2}
   m_sharedMaterial: {fileID: -5603653467206471071, guid: 8be7ee1315036431f8f4f8b2adc1ec51, type: 2}
