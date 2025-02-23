@@ -33,7 +33,7 @@ public class PlayerMove : MonoBehaviour
     {
         GameManager.OnGameOver += Disable;
         groundCheck = GameObject.FindGameObjectWithTag("GroundCheck").transform;
-
+        IsGrounded();
         animator = GetComponentInChildren<Animator>();
     }
     private bool stateComplete;
