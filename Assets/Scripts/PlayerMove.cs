@@ -23,6 +23,7 @@ public class PlayerMove : MonoBehaviour
 
     public static event Action OnPlayerDamaged;
     public static event Action OnLevelArrive;
+    public static event Action OnWheelTurned;
 
     private enum PlayerState { Idle, Running, Airborne, Climbing }
 
@@ -312,6 +313,11 @@ public class PlayerMove : MonoBehaviour
         dead = true;
         stateComplete = true;
         Debug.Log("AHHH OH MY GOD YOU FUKCING TAZED ME");
+    }
+
+    public void Wheel()
+    {
+        OnWheelTurned?.Invoke();
     }
 
     IEnumerator DeathDelay()

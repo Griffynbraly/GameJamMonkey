@@ -19,7 +19,9 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] GameObject grid;
 
-    
+    [SerializeField] GameObject topBackGround;
+
+
 
     [SerializeField] List<LevelData> levelDataBase = new List<LevelData>();
 
@@ -41,6 +43,10 @@ public class SpawnManager : MonoBehaviour
         LoadObjectMolds(levelNum);
         LoadClimbMolds(levelNum);
         SpawnLadderButton(levelNum);
+        if (levelNum == 10)
+        {
+            SpawnTopBackground();
+        }
         Debug.Log($"LoadingLevel {levelNum}");
         OnLevelLoad?.Invoke();
      
@@ -103,6 +109,11 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(ReloadWait());
     }
 
+    public void SpawnTopBackground()
+    {
+        Instantiate(levelBase, new Vector2(13, AdjustedY(0)), transform.rotation);
+        Instantiate(topBackGround, new Vector2(0, AdjustedY(0)), transform.rotation);
+    }
     IEnumerator ReloadWait()
     {
         LevelManager.levelsMade.Clear();    

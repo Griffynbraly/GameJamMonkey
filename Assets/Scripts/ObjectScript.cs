@@ -7,13 +7,25 @@ public class ObjectScript : MoldBaseScript
     {
         if (GetComponent<Collider2D>() != null)
         {
-            if (collision.gameObject.CompareTag("Player") && boxCollider.size == new Vector2(1, 1))
+            if (collision.gameObject.CompareTag("Player"))
             {
-                BananaPlacer placer = collision.gameObject.GetComponent<BananaPlacer>();
-                if (placer != null)
+                if (boxCollider.size == new Vector2(1, 1))
                 {
-                    placer.hasBanana = true;
-                    Destroy(gameObject);
+                    BananaPlacer placer = collision.gameObject.GetComponent<BananaPlacer>();
+                    if (placer != null)
+                    {
+                        placer.hasBanana = true;
+                        Destroy(gameObject);
+                    }
+                }
+
+                if (boxCollider.size == new Vector2(1.5f, 2))
+                {
+                    PlayerMove playerMove = collision.gameObject.GetComponent<PlayerMove>();
+                    if (playerMove != null)
+                    {
+                        playerMove.Wheel();
+                    }
                 }
             }
         }

@@ -12,6 +12,7 @@ TagManager:
   - Taze
   - Walkable
   - Tile
+  - Background
   layers:
   - Default
   - TransparentFX

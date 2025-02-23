@@ -12,11 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a910852551b4654ebd71a901804cdde, type: 3}
   m_Name: 10
   m_EditorClassIdentifier: 
-  endLadderPos: {x: 0, y: 0}
-  buttonPos: {x: 0, y: 0}
-  playerSpawn: {x: 0, y: 0}
-  dimensionsInLevel: []
-  objectPositions: []
+  endLadderPos: {x: 100, y: 0}
+  buttonPos: {x: 100, y: 0}
+  playerSpawn: {x: -3, y: -4}
+  dimensionsInLevel:
+  - {x: 1.5, y: 2}
+  - {x: 4, y: 2}
+  objectPositions:
+  - {x: 0, y: -2.5}
+  - {x: 0, y: -5}
   guardPositions: []
   climbablePositions: []
   climbableDimensions: []

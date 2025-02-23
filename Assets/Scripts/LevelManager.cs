@@ -33,7 +33,14 @@ public class LevelManager : MonoBehaviour
        
         if (!basesLoaded.Contains(level + 1))
         {
-            spawnManager.LoadLevelBase(level + 1);
+            if (level == 9)
+            {
+                spawnManager.SpawnTopBackground();
+            }
+            else
+            {
+                spawnManager.LoadLevelBase(level + 1);
+            }
             basesLoaded.Add(level + 1);
         }
     }

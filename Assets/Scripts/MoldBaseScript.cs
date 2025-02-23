@@ -47,5 +47,9 @@ public class MoldBaseScript : MonoBehaviour
         {
             spriteRenderer.sprite = spriteList[7];
         }
+        if (spriteScale == new Vector2(1.5f, 2))
+        {
+            spriteRenderer.sprite = spriteList[8];
+        }
     }
 }
