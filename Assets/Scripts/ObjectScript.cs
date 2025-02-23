@@ -14,8 +14,8 @@ public class ObjectScript : MoldBaseScript
                     BananaPlacer placer = collision.gameObject.GetComponent<BananaPlacer>();
                     if (placer != null)
                     {
-                        placer.hasBanana = true;
-                        Destroy(gameObject);
+                        //placer.hasBanana = true;
+                        //Destroy(gameObject);
                     }
                 }
 

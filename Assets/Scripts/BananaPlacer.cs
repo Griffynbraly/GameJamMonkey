@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BananaPlacer : MonoBehaviour
 {
-    public bool hasBanana = true;
+    public bool hasBanana = false;
     [SerializeField] GameObject bananaPrefab;
     [SerializeField] Transform playerTransform;
     [SerializeField] float playerDirectionTimes;

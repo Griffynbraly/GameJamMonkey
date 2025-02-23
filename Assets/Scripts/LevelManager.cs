@@ -31,7 +31,6 @@ public class LevelManager : MonoBehaviour
     {
         if (!loadedF)
         {
-            Debug.Log("level loaded first");
             spawnManager = FindObjectOfType<SpawnManager>();
             if (spawnManager == null)
             {

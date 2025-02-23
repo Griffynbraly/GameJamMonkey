@@ -39,7 +39,6 @@ public class SpawnManager : MonoBehaviour
         levelToLoad = 0;
         SpawnPlayer(levelToLoad);
         LoadFloor(levelToLoad);
-        Debug.Log("spawn loaded first");
     }
     public void LoadLevel(int levelNum)
     {
@@ -177,7 +176,6 @@ public class SpawnManager : MonoBehaviour
     }
     public void UnloadPrevious()
     {
-        gameOver = true;
         GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
         foreach (GameObject obj in allObjects)
         {

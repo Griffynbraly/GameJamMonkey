@@ -19,7 +19,6 @@ MonoBehaviour:
   - {x: 2, y: 3}
   objectPositions:
   - {x: -2, y: -4.5}
-  guardPositions:
-  - {x: -6, y: -4.04}
+  guardPositions: []
   climbablePositions: []
   climbableDimensions: []
