@@ -21,26 +21,29 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] GameObject topBackGround;
 
-
-
     [SerializeField] List<LevelData> levelDataBase = new List<LevelData>();
 
     private int levelToLoad;
+
+    private bool gameOver = false;
 
     static event Action OnLevelLoad;
     void Start()
     {
         PlayerMove.OnPlayerDamaged += PlayerDamaged;
         GameManager.OnStartGame += LoadFirst;
+        GameManager.OnGameOver += UnloadAll;
     }
     private void LoadFirst()
     {
         levelToLoad = 0;
         SpawnPlayer(levelToLoad);
         LoadFloor(levelToLoad);
+        Debug.Log("spawn loaded first");
     }
     public void LoadLevel(int levelNum)
     {
+        Debug.Log("loaded level");
         LoadGuards(levelNum);
 
         LoadObjectMolds(levelNum);
@@ -55,9 +58,7 @@ public class SpawnManager : MonoBehaviour
         //make sure the event is called last
     }
 
-    private void Update()
-    {
-    }
+
     public void LoadLevelBase(int levelNum)
     {
         Instantiate(levelBase, new Vector2(13, AdjustedY(0)), transform.rotation);
@@ -109,6 +110,7 @@ public class SpawnManager : MonoBehaviour
     public void PlayerDamaged()
     {
         StartCoroutine(ReloadWait());
+    
     }
 
     public void SpawnTopBackground()
@@ -121,6 +123,7 @@ public class SpawnManager : MonoBehaviour
         LevelManager.levelsMade.Clear();    
         yield return new WaitForSeconds(1);
         Restart();
+       
     }
     public void SpawnPlayer(int levelNum)
     {
@@ -174,6 +177,7 @@ public class SpawnManager : MonoBehaviour
     }
     public void UnloadPrevious()
     {
+        gameOver = true;
         GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
         foreach (GameObject obj in allObjects)
         {
@@ -189,6 +193,19 @@ public class SpawnManager : MonoBehaviour
         //make sure the event is called last
     }
 
+    public void UnloadAll()
+    {
+        gameOver = true;
+        GameObject[] allObjects = GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.CompareTag("Guard") || obj.CompareTag("Climbable") || obj.CompareTag("Walkable") || obj.CompareTag("Banana") || obj.CompareTag("LadderButton") || obj.layer == 6 || obj.CompareTag("Tile"))
+            {
+                Destroy(obj);
+            }
+        }
+    }
+
     public void Restart()
     {
         levelToLoad = LevelManager.level;
@@ -200,8 +217,11 @@ public class SpawnManager : MonoBehaviour
                 Destroy(obj);
             }
         }
-        LoadLevel(LevelManager.level);
-        SpawnPlayer(LevelManager.level);
+        if (!gameOver)
+        {
+            LoadLevel(LevelManager.level);
+            SpawnPlayer(LevelManager.level);
+        }
     }
     public void DestroyEndLadder()
     {
@@ -218,5 +238,6 @@ public class SpawnManager : MonoBehaviour
     {
         PlayerMove.OnPlayerDamaged -= PlayerDamaged;
         GameManager.OnStartGame -= LoadFirst;
+        GameManager.OnGameOver -= UnloadAll;
     }
 }

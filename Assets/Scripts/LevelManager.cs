@@ -7,26 +7,42 @@ public class LevelManager : MonoBehaviour
     public static int level { get; private set; }
     public bool buttonPressed = false;
     private LadderButton ladderButton;
-    [SerializeField] SpawnManager spawnManager;
+    private SpawnManager spawnManager;
+
+    private bool loadedF = false;
 
     private List<int> basesLoaded = new List<int>();
     static public List<int> levelsMade = new List<int>();
 
     void Start()
     {
+        level = 0;
+
         levelsMade.Clear();
         basesLoaded.Clear();
         PlayerMove.OnLevelArrive += PlayerArrive;
         GameManager.OnStartGame += LoadFirst;
-        level = 0;
+
+        
        
     }
 
     private void LoadFirst()
     {
-        spawnManager.LoadLevel(level);
-        spawnManager.LoadLevelBase(level);
-        basesLoaded.Add(level);
+        if (!loadedF)
+        {
+            Debug.Log("level loaded first");
+            spawnManager = FindObjectOfType<SpawnManager>();
+            if (spawnManager == null)
+            {
+                Debug.LogWarning("levelcouldnt find");
+            }
+            spawnManager.LoadLevel(level);
+            spawnManager.LoadLevelBase(level);
+            basesLoaded.Add(level);
+            loadedF = true;
+        }
+        
     }
     private void ButtonPressed( int level)
     {

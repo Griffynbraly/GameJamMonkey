@@ -2,6 +2,7 @@ using System.Collections;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -32,14 +33,18 @@ public class GameManager : MonoBehaviour
     private bool isCutsceneRunning = false; // Lock variable to prevent reactivation during cutscenes
 
     // End credit scenes
+    [SerializeField] GameObject skipButton;
     [SerializeField] Image[] endCreditImages;  // End credit images
+    [SerializeField] GameObject restartScreen;
     private int currentEndCreditIndex = 0;  // Index for end credit images
 
     static public event Action OnStartGame;
+    static public event Action OnGameOver;
     private void Start()
     {
+        restartScreen.SetActive(false);
         PlayerMove.OnPlayerDamaged += TakeDamage;
-        PlayerMove.OnWheelTurned += EndCutscene;
+        PlayerMove.OnWheelTurned += EndGame;
         blackBackgroundCanvasGroup = blackBackground.GetComponent<CanvasGroup>();
         playButton.onClick.AddListener(StartCutscene);
         quitButton.onClick.AddListener(QuitGame);
@@ -47,8 +52,10 @@ public class GameManager : MonoBehaviour
         UpdateHealthUI(); // Initialize heart containers
     }
 
+   
     private void ShowMainMenu()
     {
+        restartScreen.SetActive(false);
         mainMenu.SetActive(true);
         cutscenePanel.SetActive(false);
         background.SetActive(true);
@@ -57,6 +64,7 @@ public class GameManager : MonoBehaviour
     public void StartCutscene()
     {
         if (isCutsceneRunning) return;
+        skipButton.SetActive(true);
         isCutsceneRunning = true;
         background.SetActive(false);
         blackBackground.SetActive(true);
@@ -104,7 +112,8 @@ public class GameManager : MonoBehaviour
         blackBackground.SetActive(false);
         isCutsceneRunning = false;
         healthUI.SetActive(true);
-        OnStartGame?.Invoke();
+        skipButton.SetActive(false);
+        StartGame();
     }
     private void QuitGame()
     {
@@ -118,7 +127,8 @@ public class GameManager : MonoBehaviour
         UpdateHealthUI();  // Update health UI after damage
         if (playerHealth <= 0)
         {
-            Debug.Log("Player Died");
+            EndGame();
+            OnGameOver?.Invoke();
         }
     }
 
@@ -185,11 +195,18 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeIn(blackBackgroundCanvasGroup));
 
         // Start the end credit scene
-        cutscenePanel.SetActive(true);
+        //cutscenePanel.SetActive(true);
         currentEndCreditIndex = 0;
-        ShowEndCreditImage();
-        
-        StartCoroutine(PlayEndCreditSequence());
+        if (playerHealth != 0)
+        {
+            ShowEndCreditImage();
+
+            StartCoroutine(PlayEndCreditSequence());
+        }
+        else
+        {
+            restartScreen.SetActive(true);
+        }
     }
 
     // Function to show each end credit image
@@ -229,13 +246,21 @@ public class GameManager : MonoBehaviour
     }
 
     // Function to finish the end credit scene
-    private void EndEndCreditScene()
+    public void EndEndCreditScene()
     {
         cutscenePanel.SetActive(false);
         blackBackground.SetActive(false);
         isCutsceneRunning = false;
     }
 
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void StartGame()
+    {
+        OnStartGame?.Invoke();
+    }
     private void OnDisable()
     {
         PlayerMove.OnPlayerDamaged -= TakeDamage;

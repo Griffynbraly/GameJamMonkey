@@ -31,6 +31,7 @@ public class PlayerMove : MonoBehaviour
     private Animator animator;
     private void Start()
     {
+        GameManager.OnGameOver += Disable;
         groundCheck = GameObject.FindGameObjectWithTag("GroundCheck").transform;
 
         animator = GetComponentInChildren<Animator>();
@@ -317,11 +318,22 @@ public class PlayerMove : MonoBehaviour
     public void Wheel()
     {
         OnWheelTurned?.Invoke();
+        Destroy(gameObject);
+    }
+
+    private void Disable()
+    {
+        Destroy(gameObject);
     }
 
     IEnumerator DeathDelay()
     {
         yield return new WaitForSeconds(.5f);
         Destroy(gameObject);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnGameOver -= Disable;
     }
 }
