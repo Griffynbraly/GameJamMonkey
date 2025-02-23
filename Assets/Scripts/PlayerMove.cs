@@ -312,7 +312,6 @@ public class PlayerMove : MonoBehaviour
         
         dead = true;
         stateComplete = true;
-        Debug.Log("AHHH OH MY GOD YOU FUKCING TAZED ME");
     }
 
     public void Wheel()

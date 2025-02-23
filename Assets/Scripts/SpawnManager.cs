@@ -30,9 +30,12 @@ public class SpawnManager : MonoBehaviour
     static event Action OnLevelLoad;
     void Start()
     {
-        
-        levelToLoad = 0;
         PlayerMove.OnPlayerDamaged += PlayerDamaged;
+        GameManager.OnStartGame += LoadFirst;
+    }
+    private void LoadFirst()
+    {
+        levelToLoad = 0;
         SpawnPlayer(levelToLoad);
         LoadFloor(levelToLoad);
     }
@@ -47,7 +50,6 @@ public class SpawnManager : MonoBehaviour
         {
             SpawnTopBackground();
         }
-        Debug.Log($"LoadingLevel {levelNum}");
         OnLevelLoad?.Invoke();
      
         //make sure the event is called last
@@ -215,5 +217,6 @@ public class SpawnManager : MonoBehaviour
     private void OnDisable()
     {
         PlayerMove.OnPlayerDamaged -= PlayerDamaged;
+        GameManager.OnStartGame -= LoadFirst;
     }
 }

@@ -1,39 +1,45 @@
 using System.Collections;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public int playerHealth = 5;
-    public int maxHealth = 5;
-    public Image[] heartContainers; // Heart container UI images
-    public Sprite fullHeart;        // Sprite for full heart
-    public Sprite emptyHeart;       // Sprite for empty heart
+    [SerializeField] int playerHealth = 5;
+    [SerializeField] int maxHealth = 5;
+    [SerializeField] Image[] heartContainers; // Heart container UI images
+    [SerializeField] Sprite fullHeart;        // Sprite for full heart
+    [SerializeField] Sprite emptyHeart;
+
+    [SerializeField] GameObject healthUI; 
 
     // UI Elements
-    public GameObject mainMenu;        // The entire main menu panel
-    public Button playButton;          // The play button
-    public Button quitButton;          // The quit button
-    public GameObject cutscenePanel;   // Panel for cutscene images
-    public Image[] cutsceneImages;     // Array of images for the cutscene
-    public GameObject background;      // The background to disable during the cutscene
+    [SerializeField] GameObject mainMenu;        // The entire main menu panel
+    [SerializeField] Button playButton;          // The play button
+    [SerializeField] Button quitButton;          // The quit button
+    [SerializeField] GameObject cutscenePanel;   // Panel for cutscene images
+    [SerializeField] Image[] cutsceneImages;     // Array of images for the cutscene
+    [SerializeField] GameObject background;      // The background to disable during the cutscene
     private int currentCutsceneIndex = 0;
 
     // Black background for cutscenes
-    public GameObject blackBackground; // The black background to fade out
+    [SerializeField] GameObject blackBackground; // The black background to fade out
     private CanvasGroup blackBackgroundCanvasGroup; // CanvasGroup for fading the black background
 
     // Time each image will display
-    public float cutsceneDuration = 5f;    // Duration each cutscene image stays on screen
-    public float fadeDuration = 1f;        // Time for each fade effect
+    [SerializeField] float cutsceneDuration = 0.5f;    // Duration each cutscene image stays on screen
+    [SerializeField] float fadeDuration = 1f;        // Time for each fade effect
     private bool isCutsceneRunning = false; // Lock variable to prevent reactivation during cutscenes
 
     // End credit scenes
-    public Image[] endCreditImages;  // End credit images
+    [SerializeField] Image[] endCreditImages;  // End credit images
     private int currentEndCreditIndex = 0;  // Index for end credit images
 
+    static public event Action OnStartGame;
     private void Start()
     {
+        PlayerMove.OnPlayerDamaged += TakeDamage;
+        PlayerMove.OnWheelTurned += EndCutscene;
         blackBackgroundCanvasGroup = blackBackground.GetComponent<CanvasGroup>();
         playButton.onClick.AddListener(StartCutscene);
         quitButton.onClick.AddListener(QuitGame);
@@ -92,22 +98,23 @@ public class GameManager : MonoBehaviour
         EndCutscene();
     }
 
-    private void EndCutscene()
+    public void EndCutscene()
     {
         cutscenePanel.SetActive(false);
         blackBackground.SetActive(false);
         isCutsceneRunning = false;
+        healthUI.SetActive(true);
+        OnStartGame?.Invoke();
     }
-
     private void QuitGame()
     {
         Application.Quit();
     }
 
     // This method is called when the player takes damage
-    public void TakeDamage(int damage)
+    public void TakeDamage()
     {
-        playerHealth = Mathf.Max(0, playerHealth - damage);  // Ensure health doesn't go below 0
+        playerHealth = Mathf.Max(0, playerHealth - 1);  // Ensure health doesn't go below 0
         UpdateHealthUI();  // Update health UI after damage
         if (playerHealth <= 0)
         {
@@ -172,6 +179,7 @@ public class GameManager : MonoBehaviour
         isCutsceneRunning = true;
 
         // Set the background and black background for the end credits
+        healthUI.SetActive(false);
         background.SetActive(false);
         blackBackground.SetActive(true);
         StartCoroutine(FadeIn(blackBackgroundCanvasGroup));
@@ -226,5 +234,11 @@ public class GameManager : MonoBehaviour
         cutscenePanel.SetActive(false);
         blackBackground.SetActive(false);
         isCutsceneRunning = false;
+    }
+
+    private void OnDisable()
+    {
+        PlayerMove.OnPlayerDamaged -= TakeDamage;
+        PlayerMove.OnWheelTurned -= EndCutscene;
     }
 }

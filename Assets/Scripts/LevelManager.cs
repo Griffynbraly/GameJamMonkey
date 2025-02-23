@@ -17,10 +17,16 @@ public class LevelManager : MonoBehaviour
         levelsMade.Clear();
         basesLoaded.Clear();
         PlayerMove.OnLevelArrive += PlayerArrive;
+        GameManager.OnStartGame += LoadFirst;
         level = 0;
+       
+    }
+
+    private void LoadFirst()
+    {
         spawnManager.LoadLevel(level);
         spawnManager.LoadLevelBase(level);
-        basesLoaded.Add(level); 
+        basesLoaded.Add(level);
     }
     private void ButtonPressed( int level)
     {
