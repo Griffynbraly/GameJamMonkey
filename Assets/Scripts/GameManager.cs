@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour
     public float fadeDuration = 1f;        // Time for each fade effect
     private bool isCutsceneRunning = false; // Lock variable to prevent reactivation during cutscenes
 
+    // End credit scenes
+    public Image[] endCreditImages;  // End credit images
+    private int currentEndCreditIndex = 0;  // Index for end credit images
+
     private void Start()
     {
         blackBackgroundCanvasGroup = blackBackground.GetComponent<CanvasGroup>();
@@ -116,15 +120,23 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < heartContainers.Length; i++)
         {
-            if (i < playerHealth)
+            // Make sure we don't access out-of-bounds elements and show hearts only up to maxHealth
+            if (i < maxHealth)
             {
-                heartContainers[i].sprite = fullHeart;  // Set heart to full if health is > index
+                if (i < playerHealth)
+                {
+                    heartContainers[i].sprite = fullHeart;  // Set heart to full if health is > index
+                }
+                else
+                {
+                    heartContainers[i].sprite = emptyHeart;  // Set heart to empty if health is <= index
+                }
+                heartContainers[i].enabled = true;  // Show hearts up to maxHealth
             }
             else
             {
-                heartContainers[i].sprite = emptyHeart;  // Set heart to empty if health is <= index
+                heartContainers[i].enabled = false;  // Hide extra hearts beyond maxHealth
             }
-            heartContainers[i].enabled = i < maxHealth;  // Only show hearts up to maxHealth
         }
     }
 
@@ -151,5 +163,68 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
         canvasGroup.alpha = 0f;
+    }
+
+    // Function to play the end game credits
+    public void EndGame()
+    {
+        if (isCutsceneRunning) return;  // Prevent reactivation if a cutscene is running
+        isCutsceneRunning = true;
+
+        // Set the background and black background for the end credits
+        background.SetActive(false);
+        blackBackground.SetActive(true);
+        StartCoroutine(FadeIn(blackBackgroundCanvasGroup));
+
+        // Start the end credit scene
+        cutscenePanel.SetActive(true);
+        currentEndCreditIndex = 0;
+        ShowEndCreditImage();
+        
+        StartCoroutine(PlayEndCreditSequence());
+    }
+
+    // Function to show each end credit image
+    private void ShowEndCreditImage()
+    {
+        for (int i = 0; i < endCreditImages.Length; i++)
+        {
+            CanvasGroup canvasGroup = endCreditImages[i].GetComponent<CanvasGroup>();
+            endCreditImages[i].gameObject.SetActive(i == currentEndCreditIndex);
+            if (i == currentEndCreditIndex)
+            {
+                StartCoroutine(FadeIn(canvasGroup));
+            }
+        }
+    }
+
+    // Coroutine to play through the end credit sequence
+    private IEnumerator PlayEndCreditSequence()
+    {
+        while (currentEndCreditIndex < endCreditImages.Length)
+        {
+            yield return new WaitForSeconds(fadeDuration + cutsceneDuration);  // Wait for the image duration
+            CanvasGroup currentCanvasGroup = endCreditImages[currentEndCreditIndex].GetComponent<CanvasGroup>();
+            yield return StartCoroutine(FadeOut(currentCanvasGroup));  // Fade out current image
+            currentEndCreditIndex++;
+
+            if (currentEndCreditIndex < endCreditImages.Length)
+            {
+                ShowEndCreditImage();  // Show next image
+            }
+        }
+
+        // Wait for the final fade out and then complete the end game
+        yield return new WaitForSeconds(fadeDuration);
+        yield return StartCoroutine(FadeOut(blackBackgroundCanvasGroup));
+        EndEndCreditScene();
+    }
+
+    // Function to finish the end credit scene
+    private void EndEndCreditScene()
+    {
+        cutscenePanel.SetActive(false);
+        blackBackground.SetActive(false);
+        isCutsceneRunning = false;
     }
 }
